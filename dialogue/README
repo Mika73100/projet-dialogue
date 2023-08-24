@@ -1,0 +1,47 @@
+npx create-expo-app my-app
+
+lancer avec npx expo start
+
+tailwind : npm i nativewind --dev tailwindcss@3.3.2
+
+// tailwind.config.js || content: ["./App/**/*.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
+// babel.config.js || plugins: "nativewind/babel",
+
+Dans le projet : 
+// <View className="flex-1 items-center justify-center bg-white">
+
+________________________________________________________________________________
+
+Login screens
+
+rnfe = raccourcie pour crée la structure de départ.
+
+________________________________________________________________________________
+
+
+Register screens 
+
+________________________________________________________________________________
+
+Dependance de navigation : 
+
+npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+ @react-navigation/native-stack @react-navigation/native
+
+________________________________________________________________________________
+
+FIREBASE
+
+création de la BDD nom etc...
+Ce mettre en mode TEST
+Click sur web 
+crée un nouveau fichier et coller le code donner
+
+npm i @react-native-async-storage/async-storage
+l'importer dans le fichier code firebase
+
+
+email: michael-73@live.fr 
+mdp: mbarreca
+
+
