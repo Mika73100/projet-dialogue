@@ -40,6 +40,11 @@ crée un nouveau fichier et coller le code donner
 npm i @react-native-async-storage/async-storage
 l'importer dans le fichier code firebase
 
+________________________________________________________________________________
+
+Pour le drawer : npm i react-native-paper
+
+
 
 email: michael-73@live.fr 
 mdp: mbarreca

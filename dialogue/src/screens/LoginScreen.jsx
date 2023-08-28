@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase/config';
 
+
 const backImage = require("../../assets/immeuble-paris.jpg");
 
 const LoginScreen = () => {
@@ -13,13 +14,20 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const HandleLogin = () =>{
-    if (email == "" || password === '') {
-      Alert.alert('error', 'Remplissez tous les champs')
-    }else{
-      signInWithEmailAndPassword(auth, email, password).then(
-        console.log("Connexion avec succes")
-      );
+  const HandleLogin = () => {
+    if (email === '' || password === '') {
+      Alert.alert('Erreur', 'Remplissez tous les champs');
+    } else {
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          // Authentification réussie, rediriger l'utilisateur vers un écran de succès
+          navigation.navigate('HomeScreen'); //
+        })
+        .catch((error) => {
+          // Gérer les erreurs d'authentification ici
+          Alert.alert('Erreur', 'Une erreur s\'est produite lors de la connexion.');
+          console.error(error);
+        });
     }
   }
 
