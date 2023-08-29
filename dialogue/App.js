@@ -9,6 +9,7 @@ import AuthenticatedUserProvider, { AuthenticatedUserContext } from './context/A
 import { useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/config';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 
 const loadingGIF = require("./assets/loading.gif");
@@ -25,15 +26,29 @@ function AuthStack(){
 
 function MainStack(){
   return(
-    <Stack.Navigator screenOptions={{ 
+    <Stack.Navigator>
+      <Stack.Screen options={{ 
       headerTitle:'Connect City',
       headerTintColor:'#ffffff',
       headerTitleStyle: { fontWeight: 'bold'},
       headerStyle:{backgroundColor:'blue'}, 
-      headerShown: true }}>
+      headerShown: true,
+      }}
+      name= 'HomeScreen'
+      component={HomeScreen}  />
+      
 
-      <Stack.Screen name='HomeScreen' component={HomeScreen} />
+      <Stack.Screen options={{
+        headerTitle:'Profile',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'blue'},
+        headerShown: true,
+        }}
+        name='ProfileScreen' 
+        component={ProfileScreen} />
     </Stack.Navigator>
+    
   )
 }
 
