@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/config';
 
+
 const loadingGIF = require("./assets/loading.gif");
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +25,13 @@ function AuthStack(){
 
 function MainStack(){
   return(
-    <Stack.Navigator screenOptions={{ headerShown: true }}>
+    <Stack.Navigator screenOptions={{ 
+      headerTitle:'Connect City',
+      headerTintColor:'#ffffff',
+      headerTitleStyle: { fontWeight: 'bold'},
+      headerStyle:{backgroundColor:'blue'}, 
+      headerShown: true }}>
+
       <Stack.Screen name='HomeScreen' component={HomeScreen} />
     </Stack.Navigator>
   )
