@@ -30,6 +30,7 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
                 async(res) => await addDoc(collection(db, "Users"),{
                     userId: res.user.uid,
                     email: res.user.email,
+                    username: res.user.email.split('@')[0],
                 })
             ).catch((error)=>console.log(error.message));
         }
