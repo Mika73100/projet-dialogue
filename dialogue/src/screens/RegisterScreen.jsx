@@ -15,22 +15,32 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [phone, setPhone] = useState('');
+    const [adress, setAdress] = useState('');
+    const [copro, setCopro] = useState('');
 
     
     const HandleRegister = () => {
-        if(email === '' || password === '' || confirmPassword ==='' ){
+        if(email === '' || password === '' || confirmPassword ==='' || firstname === '' || lastname === '' || phone === '' || adress === '' || copro === ''){
             Alert.alert("error", "Remplissez tous les champs")
         }
         else if (password !== confirmPassword) {
             Alert.alert('Error', 'les mots de passes ne sont pas identiques')
         }
         else {
-            createUserWithEmailAndPassword(auth, email, password ).then(
+            createUserWithEmailAndPassword(auth, email, password, firstname, lastname, phone, adress, copro ).then(
                 //console.log('Utilisateur crée avec succes')
                 async(res) => await addDoc(collection(db, "Users"),{
                     userId: res.user.uid,
                     email: res.user.email,
                     username: res.user.email.split('@')[0],
+                    firstname: firstname,
+                    lastname: lastname,
+                    phone: phone,
+                    adress: adress,
+                    copro: copro
                 })
             ).catch((error)=>console.log(error.message));
         }
@@ -41,40 +51,85 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
             <ImageBackground source={backImage} className="object-cover h-screen w-full">
                 <View className="flex-1 items-center justify-center">
                     <Text className="text-yellow-400 text-3xl font-semibold text-center py-3 mt-3"> Inscription </Text>
-                    <TextInput
-                        className='mt-10 tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
-                        placeholder='Entrer votre email'
-                        autoCapitalize='none'
-                        value={email}
-                        keyboardType='email-address'
-                        onChangeText={setEmail}
-                    />
+                        <TextInput
+                            className='mt-10 tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='Entrer votre email'
+                            autoCapitalize='none'
+                            value={email}
+                            keyboardType='email-address'
+                            onChangeText={setEmail}
+                        />
 
-                    <TextInput
-                        className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
-                        placeholder='Entrer mot de passe'
-                        autoCapitalize='none'
-                        value={password}
-                        secureTextEntry={true}
-                        autoCorrect={false}
-                        onChangeText={setPassword}
-                    />
+                        <TextInput
+                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='Entrer mot de passe'
+                            autoCapitalize='none'
+                            value={password}
+                            secureTextEntry={true}
+                            autoCorrect={false}
+                            onChangeText={setPassword}
+                        />
 
-                    <TextInput
-                        className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
-                        placeholder='Confirmation de mot de passe'
-                        autoCapitalize='none'
-                        value={confirmPassword}
-                        secureTextEntry={true}
-                        autoCorrect={false}
-                        onChangeText={setConfirmPassword}
-                    />
+                        <TextInput
+                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='Confirmation de mot de passe'
+                            autoCapitalize='none'
+                            value={confirmPassword}
+                            secureTextEntry={true}
+                            autoCorrect={false}
+                            onChangeText={setConfirmPassword}
+                        />
 
-                    <View>
-                        <TouchableOpacity onPress={HandleRegister} className='mt-10 text-center bg-yellow-400 opacity-90 rounded-lg py-3 px-10'>
-                            <Text className='text-white'>S'inscrire</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <TextInput
+                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='Prenom'
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            value={firstname}
+                            onChangeText={setFirstname}
+                        />
+
+                        <TextInput
+                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='Nom'
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            value={lastname}
+                            onChangeText={setLastname}
+                        />
+
+                        <TextInput
+                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='Telephone'
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            value={phone}
+                            onChangeText={setPhone}
+                        />
+
+                        <TextInput
+                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='Adresse'
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            value={adress}
+                            onChangeText={setAdress}
+                        />
+
+                        <TextInput
+                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='Nom de copropriété'
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            value={copro}
+                            onChangeText={setCopro}
+                        />
+
+                        <View>
+                            <TouchableOpacity onPress={HandleRegister} className='mt-10 text-center bg-yellow-400 opacity-90 rounded-lg py-3 px-10'>
+                                <Text className='text-white'>S'inscrire</Text>
+                            </TouchableOpacity>
+                        </View>
 
                     <View className='mt-5 text-400 text-2xl font-semibold text-center'>
                         <Text className='font-light tracking-wider text-white text-center'>Déjà inscrit ?</Text>
