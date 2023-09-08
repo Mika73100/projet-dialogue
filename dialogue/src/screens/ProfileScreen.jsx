@@ -1,19 +1,25 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
+//import { Ionicons } from '@expo/vector-icons';
 import { AuthenticatedUserContext } from '../../context/AuthticationContext';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { auth, db } from '../../firebase/config';
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { UserRef, auth, db } from '../../firebase/config';
 import { signOut } from 'firebase/auth';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+
+
+  const userAvatar = require("../../assets/profile.png")
 
 const ProfileScreen = () => {
 
   const navigation = useNavigation()
+  const storage = getStorage()
+
   const [username, setUsername] = useState('')
   const [userEmail, setUserEmail] = useState('')
-  const [userImageUrl, setImageUrl] = useState(null)
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [phone, setPhone] = useState('');
@@ -22,15 +28,19 @@ const ProfileScreen = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const { setUser, user, setUserAvatarUrl } = useContext(AuthenticatedUserContext)
+  const [userImageUrl, setUserImageUrl] = useState(null)
 
-  const UserRef = collection(db, 'Users')
+
+  //////////////////////ici la logique ///////////////////////
+
+
   const queryResult = query(UserRef, where('email', '==',user.email))
 
   async function DocFinder(queryResult){
     const querySnapshot = await getDocs(queryResult)
     querySnapshot.forEach((doc) => {
       if (userEmail === '') {
-        const {email, username, firstname, phone, lastname, adress, copro} = doc.data()
+        const {email, username, firstname, phone, lastname, adress, copro, profilePic} = doc.data()
         setUsername(username)
         setUserEmail(email)
         setFirstname(firstname)
@@ -38,6 +48,9 @@ const ProfileScreen = () => {
         setLastname(lastname)
         setAdress(adress)
         setCopro(copro)
+
+        setUserAvatarUrl(profilePic)
+        setUserImageUrl(profilePic)
       }
     })
   }
@@ -47,7 +60,69 @@ const ProfileScreen = () => {
       DocFinder(queryResult)
   },[])
 
-  //console.log('username =', username, 'et email -', userEmail);
+  ////////////////////////////ici image picker ///////////////////////////////////////////////////
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    //console.log(result);
+
+    if (!result.canceled) {
+      uploadImage(result.assets[0].uri);
+    }
+  };
+
+
+  const uploadImage = async (image) => {
+    try {
+      setIsLoading(true);
+
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          //console.log(e);
+          reject(new TypeError("Network request failed"));
+        };
+        xhr.responseType = "blob";
+        xhr.open("GET", image, true);
+        xhr.send(null);
+      });
+    
+
+      const filename = image.substring(image.lastIndexOf('/'));
+      const imageRef = ref(storage, `ProfilePictures/${filename}`);
+
+      uploadBytes(imageRef, blob).then(async () => {
+        const downloadUrl = await getDownloadURL(imageRef);
+        
+        const querySnapshot = await getDocs(queryResult)
+        querySnapshot.forEach(async (document)=>{
+          await updateDoc(doc(db, 'Users', document.id),{
+            profilePic: downloadUrl,
+          }).then(()=> {
+            setUserImageUrl(downloadUrl), setUserAvatarUrl(downloadUrl)
+            setIsLoading(false)
+          })
+        })
+      })
+    } catch (error) {
+      Alert.alert('error', error.message);
+      setIsLoading(false);
+    }
+  }
+
+
+
+//////////////////////ici la deconnection /////////////////////////////////////////////////////
 
   const Deconnexion = ()=>{
     signOut(auth).then(()=>{
@@ -56,13 +131,24 @@ const ProfileScreen = () => {
     }).catch((error)=>{
       Alert.alert('Error', error.message)
     })
-  }
+  };
+
+  //console.log("userImageUrl =", userImageUrl)
 
   return (
     <KeyboardAwareScrollView>
         <View className="flex justify-end px-4 pt-4">
-          <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <Image className="w-24 h-24 mb-3 rounded-full shadow-lg bg-slate-500" alt="Bonnie image"/>
+          <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
+                  <TouchableOpacity onPress={pickImage} className="rounded-md">
+                    {userImageUrl === null ? (
+                      <Image source={userAvatar} className='h-10 w-10 rounded-full' />
+                    ):isLoading ? (
+                      <ActivityIndicator size='large' color='white'/>
+                    ):(
+                      <Image source={{ uri: userImageUrl }} className='w-24 h-24 rounded-full'/>
+                    )}
+                    
+                  </TouchableOpacity>
                 <Text className="pt-4 mb-1 text-xl font-medium text-gray-900 dark:text-white">{firstname} {lastname}</Text>
             <View className="flex mt-4 space-x-3 md:mt-6">
             
@@ -73,11 +159,11 @@ const ProfileScreen = () => {
         <View className="flex justify-end px-4 pt-4">
             <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Nom: {lastname}</Text>
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Prénom: {firstname}</Text>
+                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Prenom: {firstname}</Text>
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Adresse: {adress}</Text>
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Telephone: {phone}</Text>
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Email: {userEmail}</Text>
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Nom de copropriété: {copro}</Text>
+                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Nom de copropriete: {copro}</Text>
             </View>
           </View>
         
