@@ -72,7 +72,7 @@ function RootNavigator(){
   return (
     <NavigationContainer>
       {isLoading === true && !user ?(
-        <Image source={loadingGIF} className='h-full w-full'/>
+        <Image source={loadingGIF} className='my-40 h-max w-max'/>
       ): isLoading === false && !user? (
         <AuthStack />
       ):(<MainStack />)}
