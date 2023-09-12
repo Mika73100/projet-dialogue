@@ -10,6 +10,8 @@ import { useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/config';
 import ProfileScreen from './src/screens/ProfileScreen';
+import FactureScreen from './src/screens/FactureScreen';
+import HelpScreen from './src/screens/HelpScreen';
 
 
 const loadingGIF = require("./assets/loading.gif");
@@ -27,15 +29,35 @@ function AuthStack(){
 function MainStack(){
   return(
     <Stack.Navigator>
-      <Stack.Screen options={{ 
-      headerTitle:'Connect City',
-      headerTintColor:'#ffffff',
-      headerTitleStyle: { fontWeight: 'bold'},
-      headerStyle:{backgroundColor:'blue'}, 
-      headerShown: true,
-      }}
-      name= 'HomeScreen'
-      component={HomeScreen}  />
+        <Stack.Screen options={{ 
+        headerTitle:'Connect City',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'blue'}, 
+        headerShown: true,
+        }}
+        name= 'HomeScreen'
+        component={HomeScreen}  />
+
+        <Stack.Screen options={{ 
+        headerTitle:'Facture',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'blue'}, 
+        headerShown: true,
+        }}
+        name= 'FactureScreen'
+        component={FactureScreen}  />
+
+        <Stack.Screen options={{ 
+        headerTitle:'Help',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'blue'}, 
+        headerShown: true,
+        }}
+        name= 'HelpScreen'
+        component={HelpScreen}  />
       
 
       <Stack.Screen options={{

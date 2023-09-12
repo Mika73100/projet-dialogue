@@ -1,6 +1,5 @@
 import { View, Text, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
-//import { Ionicons } from '@expo/vector-icons';
 import { AuthenticatedUserContext } from '../../context/AuthticationContext';
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { UserRef, auth, db } from '../../firebase/config';
@@ -13,7 +12,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
   const userAvatar = require("../../assets/profile.png")
 
-const ProfileScreen = () => {
+  const ProfileScreen = () => {
 
   const navigation = useNavigation()
   const storage = getStorage()
@@ -139,9 +138,9 @@ const ProfileScreen = () => {
     <KeyboardAwareScrollView>
         <View className="flex justify-end px-4 pt-4">
           <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
-                  <TouchableOpacity onPress={pickImage} className="rounded-md">
+                  <TouchableOpacity onPress={pickImage} className="w-24 h-24 rounded-full">
                     {userImageUrl === null ? (
-                      <Image source={userAvatar} className='h-10 w-10 rounded-full' />
+                      <Image source={userAvatar} className='w-24 h-24 rounded-full' />
                     ):isLoading ? (
                       <ActivityIndicator size='large' color='white'/>
                     ):(
