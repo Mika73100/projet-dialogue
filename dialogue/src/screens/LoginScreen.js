@@ -33,8 +33,8 @@ const LoginScreen = () => {
 
   return (
     <KeyboardAwareScrollView>
-        <ImageBackground source={backImage} className="object-cover h-screen w-full">
-      <View className="flex-1 items-center justify-center">
+      <ImageBackground source={backImage} className="object-cover h-screen w-full">
+        <View className="flex-1 items-center justify-center">
           <Text className="text-yellow-400 text-3xl font-semibold text-center py-3 mt-3"> Connexion </Text>
           <TextInput
             className='mt-10 tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'

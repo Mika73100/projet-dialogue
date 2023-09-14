@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Image, Text } from 'react-native';
 import React, { useContext, useEffect, useLayoutEffect } from 'react';
-import { db, UserRef} from '../../firebase/config';
+import { db } from '../../firebase/config';
 import { useNavigation } from "@react-navigation/native";
 import { AuthenticatedUserContext } from '../../context/AuthticationContext';
 import { collection, getDocs,  query, where} from 'firebase/firestore';
@@ -58,6 +58,12 @@ import { Ionicons } from '@expo/vector-icons';
   return (
     <View className=''>
       <TouchableOpacity>
+          <View className="flex justify-end px-4 pt-4">
+            <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+                <TouchableOpacity><Image></Image></TouchableOpacity>
+            </View>
+          </View>
+
 
       </TouchableOpacity>
     </View>

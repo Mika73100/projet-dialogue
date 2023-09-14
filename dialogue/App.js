@@ -35,6 +35,7 @@ function MainStack(){
         headerTitleStyle: { fontWeight: 'bold'},
         headerStyle:{backgroundColor:'blue'}, 
         headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
         }}
         name= 'HomeScreen'
         component={HomeScreen}  />
@@ -45,6 +46,7 @@ function MainStack(){
         headerTitleStyle: { fontWeight: 'bold'},
         headerStyle:{backgroundColor:'blue'}, 
         headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
         }}
         name= 'FactureScreen'
         component={FactureScreen}  />
@@ -55,6 +57,7 @@ function MainStack(){
         headerTitleStyle: { fontWeight: 'bold'},
         headerStyle:{backgroundColor:'blue'}, 
         headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
         }}
         name= 'HelpScreen'
         component={HelpScreen}  />
@@ -66,6 +69,7 @@ function MainStack(){
         headerTitleStyle: { fontWeight: 'bold'},
         headerStyle:{backgroundColor:'blue'},
         headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
         }}
         name='ProfileScreen' 
         component={ProfileScreen} />

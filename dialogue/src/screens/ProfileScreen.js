@@ -1,7 +1,7 @@
-import { View, Text, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Alert, ActivityIndicator, TextInput } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthenticatedUserContext } from '../../context/AuthticationContext';
-import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { UserRef, auth, db } from '../../firebase/config';
 import { signOut } from 'firebase/auth';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -16,7 +16,6 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
   const navigation = useNavigation()
   const storage = getStorage()
-
   const [username, setUsername] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [firstname, setFirstname] = useState('');
@@ -24,6 +23,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
   const [phone, setPhone] = useState('');
   const [adress, setAdress] = useState('');
   const [copro, setCopro] = useState('');
+  const [bio, setBio] = useState('');
 
   const [isLoading, setIsLoading] = useState(false)
   const { setUser, user, setUserAvatarUrl } = useContext(AuthenticatedUserContext)
@@ -32,14 +32,13 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
   //////////////////////ici la logique ///////////////////////
 
-
   const queryResult = query(UserRef, where('email', '==',user.email))
 
   async function DocFinder(queryResult){
     const querySnapshot = await getDocs(queryResult)
     querySnapshot.forEach((doc) => {
       if (userEmail === '') {
-        const {email, username, firstname, phone, lastname, adress, copro, profilePic} = doc.data()
+        const {email, username, firstname, phone, lastname, adress, copro, profilePic, bio} = doc.data()
         setUsername(username)
         setUserEmail(email)
         setFirstname(firstname)
@@ -50,6 +49,8 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
         setUserAvatarUrl(profilePic)
         setUserImageUrl(profilePic)
+        setBio(bio);
+
       }
     })
   }
@@ -58,6 +59,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
     if (!user) return
       DocFinder(queryResult)
   },[])
+
 
   ////////////////////////////ici image picker ///////////////////////////////////////////////////
 
@@ -119,6 +121,27 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
     }
   }
 
+////////////////////////////ici la bio ///////////////////////////
+
+const updateBio = async () => {
+  try {
+    setIsLoading(true);
+
+    const querySnapshot = await getDocs(queryResult);
+    querySnapshot.forEach(async (document) => {
+      await updateDoc(doc(db, 'Users', document.id), {
+        bio: bio, // Update the 'bio' field with the new bio text
+      }).then(() => {
+        setIsLoading(false);
+        // Réinitialisez la valeur du texte bio après la sauvegarde réussie
+        setBio('');
+      });
+    });
+  } catch (error) {
+    Alert.alert('Error', error.message);
+    setIsLoading(false);
+  }
+};
 
 
 //////////////////////ici la deconnection /////////////////////////////////////////////////////
@@ -169,11 +192,25 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
       <View className="flex justify-end px-4 pt-4">
         <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-              <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Bio: </Text>
-              <Text className="h-24 rounded-full shadow-lg bg-slate-500">Coucou</Text>
+              <TextInput 
+                className="h-24 p-5"
+                value={bio}
+                onChangeText={(text) => setBio(text)}
+                placeholder={bio ? bio : "Enter your bio..."}
+                multiline
+                numberOfLines={4}
+                onPressIn={updateBio}
+              />
+
+            <TouchableOpacity onPress={updateBio} className="bg-blue-600 py-2 rounded-md mx-8 mt-2 mb-3">
+              <Text className="text-center font-semibold text-white text-lg">
+                Save Bio
+              </Text>
+            </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity onPress={Deconnexion} className="bg-red-600 py-2 rounded-md mx-8 mt-6 mb-3">
+      
+      <TouchableOpacity onPress={Deconnexion} className="bg-red-600 py-2 rounded-md mx-8 mt-5 mb-3">
               <Text className="text-center font-semibold text-white text-lg">
                 logaout
               </Text>
