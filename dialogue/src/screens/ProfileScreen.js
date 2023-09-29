@@ -30,7 +30,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
   const [userImageUrl, setUserImageUrl] = useState(null)
 
 
-  //////////////////////ici la logique ///////////////////////
+  //////////////////////ici la logique /////////////////////////////////////////
 
   const queryResult = query(UserRef, where('email', '==',user.email))
 
@@ -61,7 +61,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
   },[])
 
 
-  ////////////////////////////ici image picker ///////////////////////////////////////////////////
+  ////////////////////////////ici image picker /////////////////////////////////
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -121,7 +121,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
     }
   }
 
-////////////////////////////ici la bio ///////////////////////////
+////////////////////////////ici la bio /////////////////////////////////////////
 
 const updateBio = async () => {
   try {
@@ -134,7 +134,7 @@ const updateBio = async () => {
       }).then(() => {
         setIsLoading(false);
         // Réinitialisez la valeur du texte bio après la sauvegarde réussie
-        setBio('');
+        //setBio('');
       });
     });
   } catch (error) {
@@ -144,7 +144,7 @@ const updateBio = async () => {
 };
 
 
-//////////////////////ici la deconnection /////////////////////////////////////////////////////
+//////////////////////ici la deconnection //////////////////////////////////////
 
   const Deconnexion = ()=>{
     signOut(auth).then(()=>{
@@ -202,7 +202,7 @@ const updateBio = async () => {
                 onPressIn={updateBio}
               />
 
-            <TouchableOpacity onPress={updateBio} className="bg-blue-600 py-2 rounded-md mx-8 mt-2 mb-3">
+            <TouchableOpacity onPress={updateBio} className="bg-orange-500 w-13 h-13 rounded-lg items-center justify-center'">
               <Text className="text-center font-semibold text-white text-lg">
                 Save Bio
               </Text>

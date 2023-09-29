@@ -1,71 +1,95 @@
-import { TextInput, ScrollView, View, Button, Text } from 'react-native'
-import React, { useState } from 'react'
-
-// Importez OPENAI_API_KEY depuis vos variables d'environnement
-import {OPENAI_API_KEY} from "@env"
 import axios from 'axios';
+import React, { useState } from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-function HelpScreen() {
-    const [question, setQuestion] = useState('');
-    const [reponse, setReponse] = useState('');
-    const [loading, setLoading] = useState(false);
+const HelpScreen = () => {
 
-    const genererReponse = async () => {
-        if (!question) {
-            console.log('erreur dans la question')
-            return;
-        }
+    const [data, setData] = useState([]);
+    const apiKey = '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';
+    const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions';
+    const [textInput, setTextInput] = useState('');
 
-        try {
-            setLoading(true);
-
-            const response = await axios.post(
-                'https://api.openai.com/v1/engines/davinci/completions',
-                {
-                    prompt: "Quelle est la capitale de la France ?",
-                    max_tokens: 50, // Limitez la longueur de la réponse si nécessaire
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${OPENAI_API_KEY}`,
-                    },
-                }
-            );
-            console.log('Réponse de l\'API:', response.data);
-            setReponse(response.data.answers[0]);
-        } catch (error) {
-            if (error.response && error.response.status === 429) {
-                console.error('Trop de requêtes. Attendez avant de réessayer.');
-                // Attendez un certain temps avant de réessayer (par exemple, 30 secondes)
-                setTimeout(genererReponse, 30000);
-            } else {
-                console.error('Erreur lors de la génération de la réponse:', error);
+    const handleSend = async () => {
+        const prompt = textInput
+        const response = await axios.post(apiUrl, {
+            prompt: prompt,
+            max_tokens: 1024,
+            temperature: 0.5
+        }, {
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
             }
-        } finally {
-            setLoading(false);
-        }
-    };
+        })
+        const text = response.data.choices[0].text;
+        setData([...data, {type: 'user', 'text': textInput}, {type: 'bot', 'text': text}])
+        setTextInput('');
+    }
 
     return (
-        <View>
-            <TextInput
-                placeholder="Posez votre question"
-                value={question}
-                onChangeText={(text) => setQuestion(text)}
-                style={{ borderBottomWidth: 1, marginBottom: 20 }}
-            />
-            <Button title="Générer réponse" onPress={genererReponse} />
-            {loading && <Text>Chargement en cours...</Text>}
-            {reponse && (
-                <ScrollView>
-                    <Text>Réponse :</Text>
-                    <Text>{reponse}</Text>
-                </ScrollView>
-            )}
+        <View style={styles.container}>
+                <FlatList 
+                    data={data}
+                    keyExtractor={(item, index) => index.toString()}
+                    style={styles.body}
+                    renderItem={({item}) => (
+                        <View style={{flexDirection: 'row', padding:10}}>
+                                <Text style={{fontWeight: 'bold', color: item.type === 'user' ? 'green' : 'red'}}>
+                                    {item.type === 'user' ? 'Vous :' : 'Bot :' }
+                                </Text>
+                                
+                                <Text style={styles.bot}>
+                                    {item.text}
+                                </Text>
+                        </View>
+                    )}  
+                />
+                
+                    <TextInput 
+                        style={styles.input}
+                        value={textInput}
+                        onChangeText={text => setTextInput(text)}
+                        placeholder='Pose moi une question'
+                    />
+                    <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleSend}
+                    >
+                        <Text style={styles.buttonText}>Let's Go</Text>
+                    </TouchableOpacity>
         </View>
-    );
+    )
 }
-
 
 export default HelpScreen
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: 'black',
+        width: '90%',
+        height: 60,
+        marginBottom: 10,
+        borderRadius: 10
+    },
+    button: {
+        backgroundColor: 'yellow',
+        height:60,
+        borderRadius:10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom:10,
+    },
+    buttonText: {
+        fontSize: 10,
+        fontWeight: 'bold',
+        color: 'blue'
+    }
+    
+})

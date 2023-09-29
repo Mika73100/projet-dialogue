@@ -12,6 +12,8 @@ import { auth } from './firebase/config';
 import ProfileScreen from './src/screens/ProfileScreen';
 import FactureScreen from './src/screens/FactureScreen';
 import HelpScreen from './src/screens/HelpScreen';
+import SearchScreen from './src/screens/SearchScreen';
+import MessageScreen from './src/components/MessageScreen';
 
 
 const loadingGIF = require("./assets/loading.gif");
@@ -73,6 +75,30 @@ function MainStack(){
         }}
         name='ProfileScreen' 
         component={ProfileScreen} />
+
+
+        <Stack.Screen options={{
+        headerTitle:'Search',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'blue'},
+        headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
+        }}
+        name='Search' 
+        component={SearchScreen} />
+
+
+        <Stack.Screen options={{
+        headerTitle:'Message',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'blue'},
+        headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
+        }}
+        name='Message' 
+        component={MessageScreen} />
     </Stack.Navigator>
     
   )

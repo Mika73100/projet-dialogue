@@ -1,5 +1,5 @@
-import { View, TouchableOpacity, Image, Text } from 'react-native';
-import React, { useContext, useEffect, useLayoutEffect } from 'react';
+import { View, TouchableOpacity, Image, Text, ActivityIndicator, FlatList } from 'react-native';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { db } from '../../firebase/config';
 import { useNavigation } from "@react-navigation/native";
 import { AuthenticatedUserContext } from '../../context/AuthticationContext';
@@ -13,7 +13,9 @@ import { Ionicons } from '@expo/vector-icons';
   const navigation = useNavigation();
 
   //ici je recupere des information via le context API
-  const {user, userAvatrUrl, setUserAvatarUrl} = useContext(AuthenticatedUserContext)
+  const {user, userAvatrUrl, setUserAvatarUrl} = useContext(AuthenticatedUserContext);
+
+  const [isLoading, setIsLoading] = useState(false)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -28,9 +30,9 @@ import { Ionicons } from '@expo/vector-icons';
       ),
 
       headerLeft: () =>(
-        <TouchableOpacity onPress={() => navigation.navigate('HelpScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Search')}>
           {!userAvatrUrl ? (
-            <Ionicons name="help" size={24} color="white"><Text className='w-[80%] text-base py-2 px-1 mx-5 mb-5'>Help</Text></Ionicons>
+            <Ionicons name="search" size={24} color="white"><Text className='w-[80%] text-base py-2 px-1 mx-5 mb-5'>Search</Text></Ionicons>
           ): (
             <Image source={{ uri:userAvatrUrl }} className='h-10 w-10 rounded-full' />
           )}
@@ -56,17 +58,24 @@ import { Ionicons } from '@expo/vector-icons';
     }, []);
 
   return (
-    <View className=''>
-      <TouchableOpacity>
-          <View className="flex justify-end px-4 pt-4">
-            <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <TouchableOpacity><Image></Image></TouchableOpacity>
-            </View>
-          </View>
+    <>
+    {isLoading ? (
+      <View className='items-center justify-center h-full'>
+        <ActivityIndicator size='large' color='red' />
+      </View>
+    ):(
+      <FlatList />
+    )}
 
-
-      </TouchableOpacity>
+    <View className='flex flex-row-reverse absolute bottom-[10%] right-[7%]'>
+      <View>
+        <TouchableOpacity onPress={()=> navigation.navigate('HelpScreen')} className='bg-orange-500 h-16 w-16 rounded-full items-center justify-center'>
+          <Ionicons name="help" size={30} color="white" /><Text className='text-white'>Help</Text>
+        </TouchableOpacity>
+      </View>
     </View>
+
+    </>
   )
 }
 

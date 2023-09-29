@@ -20,17 +20,18 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
     const [phone, setPhone] = useState('');
     const [adress, setAdress] = useState('');
     const [copro, setCopro] = useState('');
+    const [code, setCode] = useState('');
 
     
     const HandleRegister = () => {
-        if(email === '' || password === '' || confirmPassword ==='' || firstname === '' || lastname === '' || phone === '' || adress === '' || copro === ''){
+        if(email === '' || password === '' || confirmPassword ==='' || firstname === '' || lastname === '' || phone === '' || adress === '' || copro === '' || code === ''){
             Alert.alert("error", "Remplissez tous les champs")
         }
         else if (password !== confirmPassword) {
             Alert.alert('Error', 'les mots de passes ne sont pas identiques')
         }
         else {
-            createUserWithEmailAndPassword(auth, email, password, firstname, lastname, phone, adress, copro ).then(
+            createUserWithEmailAndPassword(auth, email, password, firstname, lastname, phone, adress, copro, code ).then(
                 //console.log('Utilisateur crée avec succes')
                 async(res) => await addDoc(collection(db, "Users"),{
                     userId: res.user.uid,
@@ -40,7 +41,8 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
                     lastname: lastname,
                     phone: phone,
                     adress: adress,
-                    copro: copro
+                    copro: copro,
+                    code: code
                 })
             ).catch((error)=>console.log(error.message));
         }
@@ -92,7 +94,8 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
                         <TextInput
                             className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
                             placeholder='Nom'
-                            autoCapitalize='none'
+                            //tous sera convertie en capitale
+                            autoCapitalize='characters'
                             autoCorrect={false}
                             value={lastname}
                             onChangeText={setLastname}
@@ -123,6 +126,15 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
                             autoCorrect={false}
                             value={copro}
                             onChangeText={setCopro}
+                        />
+
+                        <TextInput
+                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
+                            placeholder='code'
+                            keyboardType="numeric"
+                            autoCorrect={false}
+                            value={code}
+                            onChangeText={setCode}
                         />
 
                         <View>
