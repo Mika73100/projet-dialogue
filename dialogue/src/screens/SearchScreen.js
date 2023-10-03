@@ -13,19 +13,19 @@ const userAvatar = require('../../assets/profile.png')
 const SearchScreen = () => {
   const navigation = useNavigation();
 
-  const [searchFiend, setSearchFiend] = useState('')
+  const [searchFriend, setSearchFriend] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [found, setFound] = useState(false)
-  const [searchFiendName, setSearchFiendName] = useState([])
+  const [searchFriendName, setSearchFriendName] = useState([])
 
 
   //je travail avec firebase et donc il est possible que certain element mettes du temps a me parvenir 
   //alors je travail avec une fonction async
   const HandleSearch = async() => {
     //si la barre de recherche est vide alors
-    if (searchFiend === '') {
+    if (searchFriend === '') {
       //setSearchFriendName avec un tableau vide
-      setSearchFiendName([])
+      setSearchFriendName([])
       //Dans ce cas affiche une alerte avec un message.
       Alert.alert("Veuillez entrer un nom d'utilisateur")
     } else {
@@ -35,9 +35,10 @@ const SearchScreen = () => {
 
       const queryResult = query(
         UserRef,
-        where('lastname', '>=', searchFiend.trim()), 
-        where('lastname', '<=', searchFiend.trim() + '\uf8ff'),
+        where('lastname', '>=', searchFriend.trim()), 
+        where('lastname', '<=', searchFriend.trim() + '\uf8ff'),
         )
+
 
       const querySnapshot = await getDocs(queryResult)
       //Si query Result n'est pas vide
@@ -51,7 +52,7 @@ const SearchScreen = () => {
           friends.push({profilePic, lastname, email})
         })
         //dans ce cas je recupère les élements et les stock dans la variable friends crée plus haut.
-        setSearchFiendName(friends)
+        setSearchFriendName(friends)
         //je met true puisque nous avons des élement.
         setFound(true)
       } else {
@@ -61,8 +62,7 @@ const SearchScreen = () => {
     }
   }
 
-  //console.log("list des utilisateurs", searchFiendName)
-
+  //console.log("list des utilisateurs", searchFriendName)
 
   return (
     <View className='bg-gray-200 flex-1'>
@@ -73,8 +73,8 @@ const SearchScreen = () => {
           placeholder="Rechercher un nom d'utilisateur"
           autoCapitalize='characters'
           keyboardType='default'
-          value={searchFiend}
-          onChangeText={setSearchFiend}
+          value={searchFriend}
+          onChangeText={setSearchFriend}
           textContentType='name'
         />
         <TouchableOpacity 
@@ -90,7 +90,7 @@ const SearchScreen = () => {
         ): found ?(
           <View>
             <FlatList 
-              data={searchFiendName}
+              data={searchFriendName}
               key={(item)=>item.username}
               // Utilisation de VirtualizedList pour améliorer les performances
               // en limitant le rendu d'éléments à l'écran

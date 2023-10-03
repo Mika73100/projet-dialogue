@@ -212,7 +212,7 @@ const updateBio = async () => {
       
       <TouchableOpacity onPress={Deconnexion} className="bg-red-600 py-2 rounded-md mx-8 mt-5 mb-3">
               <Text className="text-center font-semibold text-white text-lg">
-                logaout
+                Logout
               </Text>
       </TouchableOpacity>
     </KeyboardAwareScrollView>
