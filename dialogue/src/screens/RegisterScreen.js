@@ -131,7 +131,7 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
                         <TextInput
                             className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
                             placeholder='code'
-                            keyboardType="numeric"
+                            keyboardType='numeric'
                             autoCorrect={false}
                             value={code}
                             onChangeText={setCode}

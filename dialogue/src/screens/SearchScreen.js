@@ -21,46 +21,66 @@ const SearchScreen = () => {
 
   //je travail avec firebase et donc il est possible que certain element mettes du temps a me parvenir 
   //alors je travail avec une fonction async
-  const HandleSearch = async() => {
-    //si la barre de recherche est vide alors
+  const HandleSearch = async () => {
     if (searchFriend === '') {
-      //setSearchFriendName avec un tableau vide
-      setSearchFriendName([])
-      //Dans ce cas affiche une alerte avec un message.
-      Alert.alert("Veuillez entrer un nom d'utilisateur")
+      // Si la barre de recherche est vide, réinitialise les données et affiche une alerte.
+      setSearchFriendName([]);
+      Alert.alert("Veuillez entrer un nom d'utilisateur");
     } else {
       setIsLoading(true);
-
-      const UserRef = collection(db, 'Users')
-
-      const queryResult = query(
+  
+      const UserRef = collection(db, 'Users');
+      const AdminRef = collection(db, 'Admin');
+  
+      // Création des requêtes pour rechercher dans les collections "Users" et "Admins".
+      const userQuery = query(
         UserRef,
-        where('lastname', '>=', searchFriend.trim()), 
-        where('lastname', '<=', searchFriend.trim() + '\uf8ff'),
-        )
-
-
-      const querySnapshot = await getDocs(queryResult)
-      //Si query Result n'est pas vide
-      if (!querySnapshot.empty) {
-        //alors = fiends tableau vide
-        let friends = []
-        //et a partir du docment je récupère les informations avec une boucle foreach
-        querySnapshot.forEach((document)=> {
-          const { profilePic, lastname, email} = document.data()
-          //je push les elements recolté dans le tableau friends
-          friends.push({profilePic, lastname, email})
-        })
-        //dans ce cas je recupère les élements et les stock dans la variable friends crée plus haut.
-        setSearchFriendName(friends)
-        //je met true puisque nous avons des élement.
-        setFound(true)
-      } else {
-        setFound(false)
+        where('lastname', '>=', searchFriend.trim()),
+        where('lastname', '<=', searchFriend.trim() + '\uf8ff')
+      );
+  
+      const adminQuery = query(
+        AdminRef,
+        where('lastname', '>=', searchFriend.trim()),
+        where('lastname', '<=', searchFriend.trim() + '\uf8ff')
+      );
+  
+      try {
+        // Exécution des deux requêtes de manière asynchrone avec Promise.all.
+        const [userSnapshot, adminSnapshot] = await Promise.all([
+          getDocs(userQuery),
+          getDocs(adminQuery)
+        ]);
+  
+        let friends = [];
+  
+        // Traitement des résultats de la collection "Users".
+        if (!userSnapshot.empty) {
+          userSnapshot.forEach((document) => {
+            const { profilePic, lastname, firstname, email } = document.data();
+            friends.push({ profilePic, lastname, firstname, email });
+          });
+        }
+  
+        // Traitement des résultats de la collection "Admins".
+        if (!adminSnapshot.empty) {
+          adminSnapshot.forEach((document) => {
+            const { profilePic, lastname, firstname, email } = document.data();
+            friends.push({ profilePic, lastname, firstname, email });
+          });
+        }
+  
+        // Met à jour les données d'affichage avec les résultats.
+        setSearchFriendName(friends);
+        setFound(friends.length > 0);
+      } catch (error) {
+        console.error("Erreur lors de la recherche :", error);
       }
-      setIsLoading(false)
+  
+      setIsLoading(false);
     }
-  }
+  };
+  
 
   //console.log("list des utilisateurs", searchFriendName)
 
@@ -103,7 +123,8 @@ const SearchScreen = () => {
                 <TouchableOpacity onPress={() => navigation.navigate('Message',{
                   friendName: item.lastname,
                   friendAvatar: item.profilePic,
-                  friendEmail: item.email
+                  friendEmail: item.email,
+                  firstName: item.firstname
                 })}>
                               <View className='flex-row items-center space-x-6 bg-gray-100 p-5 rounded-lg mx-2'>
                                   {item.profilePic !== undefined ? (
@@ -118,8 +139,7 @@ const SearchScreen = () => {
                                     className='h-12 w-12 rounded-full'
                                     />
                                   )}
-                                  <Text className='text-lg tracking-widest text-gray-500'>{item.lastname}</Text>
-                                  <Text className='text-lg tracking-widest text-gray-500'>{item.email}</Text>
+                                  <Text className='text-lg tracking-widest text-gray-500'>{item.lastname} {item.firstname} {item.email}</Text>
                               </View>
                 </TouchableOpacity>
               )}
