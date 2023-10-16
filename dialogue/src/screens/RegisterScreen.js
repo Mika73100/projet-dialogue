@@ -15,33 +15,23 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
-    const [phone, setPhone] = useState('');
-    const [adress, setAdress] = useState('');
-    const [copro, setCopro] = useState('');
     const [code, setCode] = useState('');
 
     
     const HandleRegister = () => {
-        if(email === '' || password === '' || confirmPassword ==='' || firstname === '' || lastname === '' || phone === '' || adress === '' || copro === '' || code === ''){
+        if(email === '' || password === '' || confirmPassword ==='' || code === ''){
             Alert.alert("error", "Remplissez tous les champs")
         }
         else if (password !== confirmPassword) {
             Alert.alert('Error', 'les mots de passes ne sont pas identiques')
         }
         else {
-            createUserWithEmailAndPassword(auth, email, password, firstname, lastname, phone, adress, copro, code ).then(
+            createUserWithEmailAndPassword(auth, email, password, code ).then(
                 //console.log('Utilisateur crée avec succes')
                 async(res) => await addDoc(collection(db, "Users"),{
                     userId: res.user.uid,
                     email: res.user.email,
                     username: res.user.email.split('@')[0],
-                    firstname: firstname,
-                    lastname: lastname,
-                    phone: phone,
-                    adress: adress,
-                    copro: copro,
                     code: code
                 })
             ).catch((error)=>console.log(error.message));
@@ -80,52 +70,6 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
                             secureTextEntry={true}
                             autoCorrect={false}
                             onChangeText={setConfirmPassword}
-                        />
-
-                        <TextInput
-                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
-                            placeholder='Prenom'
-                            autoCapitalize='none'
-                            autoCorrect={false}
-                            value={firstname}
-                            onChangeText={setFirstname}
-                        />
-
-                        <TextInput
-                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
-                            placeholder='Nom'
-                            //tous sera convertie en capitale
-                            autoCapitalize='characters'
-                            autoCorrect={false}
-                            value={lastname}
-                            onChangeText={setLastname}
-                        />
-
-                        <TextInput
-                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
-                            placeholder='Telephone'
-                            autoCapitalize='none'
-                            autoCorrect={false}
-                            value={phone}
-                            onChangeText={setPhone}
-                        />
-
-                        <TextInput
-                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
-                            placeholder='Adresse'
-                            autoCapitalize='none'
-                            autoCorrect={false}
-                            value={adress}
-                            onChangeText={setAdress}
-                        />
-
-                        <TextInput
-                            className='tracking-widest text-center bg-gray-100 opacity-90 rounded-lg w-[80%] text-base py-2 px-1 mx-5 mb-5'
-                            placeholder='Nom de copropriété'
-                            autoCapitalize='none'
-                            autoCorrect={false}
-                            value={copro}
-                            onChangeText={setCopro}
                         />
 
                         <TextInput

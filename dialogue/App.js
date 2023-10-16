@@ -10,10 +10,16 @@ import { useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/config';
 import ProfileScreen from './src/screens/ProfileScreen';
-import FactureScreen from './src/screens/FactureScreen';
 import HelpScreen from './src/screens/HelpScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import MessageScreen from './src/components/MessageScreen';
+
+////////////////////ADMIN///////////////////////////////
+import AdminScreen from './src/screens/admin/AdminScreen';
+import DocumentScreen from './src/screens/admin/DocumentScreen';
+import FactureScreen from './src/screens/admin/FactureScreen';
+import UserScreen from './src/screens/admin/UserScreen';
+
 
 
 const loadingGIF = require("./assets/loading.gif");
@@ -41,17 +47,6 @@ function MainStack(){
         }}
         name= 'HomeScreen'
         component={HomeScreen}  />
-
-        <Stack.Screen options={{ 
-        headerTitle:'Facture',
-        headerTintColor:'#ffffff',
-        headerTitleStyle: { fontWeight: 'bold'},
-        headerStyle:{backgroundColor:'blue'}, 
-        headerShown: true,
-        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
-        }}
-        name= 'FactureScreen'
-        component={FactureScreen}  />
 
         <Stack.Screen options={{ 
         headerTitle:'Help',
@@ -99,6 +94,55 @@ function MainStack(){
         }}
         name='Message' 
         component={MessageScreen} />
+
+
+        <Stack.Screen options={{
+        headerTitle:'Admin',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'black'},
+        headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
+        }}
+        name='AdminScreen' 
+        component={AdminScreen} />
+
+
+        <Stack.Screen options={{
+        headerTitle:'Documents',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'black'},
+        headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
+        }}
+        name='DocumentScreen' 
+        component={DocumentScreen} />
+
+
+        <Stack.Screen options={{
+        headerTitle:'Factures',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'black'},
+        headerShown: true,
+        headerBackTitleVisible: false,
+        }}
+        name='FactureScreen' 
+        component={FactureScreen} />
+
+
+        <Stack.Screen options={{
+        headerTitle:'Users',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'black'},
+        headerShown: true,
+        headerBackTitleVisible: false,
+        }}
+        name='UserScreen' 
+        component={UserScreen} />
+
     </Stack.Navigator>
     
   )

@@ -123,14 +123,18 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 ////////////////////////////ici la bio /////////////////////////////////////////
 
-const updateBio = async () => {
+const update = async () => {
   try {
     setIsLoading(true);
 
     const querySnapshot = await getDocs(queryResult);
     querySnapshot.forEach(async (document) => {
       await updateDoc(doc(db, 'Users', document.id), {
-        bio: bio, // Update the 'bio' field with the new bio text
+        bio: bio,
+        phone: phone, // Update the 'bio' field with the new bio text
+        firstname: firstname,
+        lastname: lastname,
+        adress: adress
       }).then(() => {
         setIsLoading(false);
         // Réinitialisez la valeur du texte bio après la sauvegarde réussie
@@ -180,35 +184,66 @@ const updateBio = async () => {
 
         <View className="flex justify-end px-4 pt-4">
             <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Nom: {lastname}</Text>
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Prenom: {firstname}</Text>
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Adresse: {adress}</Text>
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Telephone: {phone}</Text>
+
+                <TextInput 
+                  className="pt-4 text-sm text-gray-500 dark:text-gray-400"
+                  value={firstname}
+                  onChangeText={(text) => setFirstname(text)}
+                  placeholder={firstname ? firstname : "Enter your firstname..."}
+                  onPressIn={update}
+                />
+
+                <TextInput 
+                  className="pt-4 text-sm text-gray-500 dark:text-gray-400"
+                  value={lastname}
+                  onChangeText={(text) => setLastname(text)}
+                  placeholder={lastname ? lastname : "Enter your lastname..."}
+                  onPressIn={update}
+                />
+
+                <TextInput 
+                  className="pt-4 text-sm text-gray-500 dark:text-gray-400"
+                  value={adress}
+                  onChangeText={(text) => setAdress(text)}
+                  placeholder={adress ? adress : "Enter your adress..."}
+                  onPressIn={update}
+                />
+                
+                <TextInput 
+                  className="pt-4 text-sm text-gray-500 dark:text-gray-400"
+                  value={phone}
+                  keyboardType='numeric'
+                  onChangeText={(text) => setPhone(text)}
+                  placeholder={phone ? phone : "Enter your phone..."}
+                  onPressIn={update}
+                ></TextInput>
+
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Email: {userEmail}</Text>
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Nom de copropriete: {copro}</Text>
             </View>
           </View>
-        
 
       <View className="flex justify-end px-4 pt-4">
         <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
               <TextInput 
-                className="h-24 p-5"
+                className="h-24 p-5 text-sm text-gray-500 dark:text-gray-400"
                 value={bio}
                 onChangeText={(text) => setBio(text)}
                 placeholder={bio ? bio : "Enter your bio..."}
                 multiline
                 numberOfLines={4}
-                onPressIn={updateBio}
+                onPressIn={update}
               />
 
-            <TouchableOpacity onPress={updateBio} className="bg-orange-500 w-13 h-13 rounded-lg items-center justify-center'">
+
+        </View>
+      </View>
+
+      <TouchableOpacity onPress={update} className="bg-orange-600 py-2 rounded-md mx-8 mt-5 mb-3">
               <Text className="text-center font-semibold text-white text-lg">
                 Save Bio
               </Text>
-            </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableOpacity>
       
       <TouchableOpacity onPress={Deconnexion} className="bg-red-600 py-2 rounded-md mx-8 mt-5 mb-3">
               <Text className="text-center font-semibold text-white text-lg">
