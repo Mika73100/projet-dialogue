@@ -1,10 +1,13 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { collection, query, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { auth, db } from '../../../firebase/config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-const DocumentScreen = () => {
+
+const UserScreen = () => {
     const [users, setUsers] = useState([]);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -67,16 +70,16 @@ const DocumentScreen = () => {
         }
     };
 
-    const updateUser = async (userId, updatedUserData) => {
-        try {
-            const userDocRef = doc(db, 'Users', userId);
-            await updateDoc(userDocRef, updatedUserData);
-            console.log('Utilisateur mis à jour avec succès.');
-            fetchUsers(); // Actualisez la liste des utilisateurs
-        } catch (error) {
-            console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
-        }
-    };
+    // const updateUser = async (userId, updatedUserData) => {
+    //     try {
+    //         const userDocRef = doc(db, 'Users', userId);
+    //         await updateDoc(userDocRef, updatedUserData);
+    //         console.log('Utilisateur mis à jour avec succès.');
+    //         fetchUsers(); // Actualisez la liste des utilisateurs
+    //     } catch (error) {
+    //         console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
+    //     }
+    // };
 
     return (
         <View style={{ flex: 1, padding: 20 }}>
@@ -135,7 +138,7 @@ const DocumentScreen = () => {
                         <Text>{item.email}</Text>
                         
                         <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={() => updateUser(item.id, { email: 'nouveau@email.com', password: 'nouveaumdp' })}
                                 style={{
                                     backgroundColor: 'green',
@@ -144,8 +147,8 @@ const DocumentScreen = () => {
                                     marginRight: 5,
                                 }}
                             >
-                                <Text style={{ color: 'white' }}>Ajouter</Text>
-                            </TouchableOpacity>
+                                <Text style={{ color: 'white' }}>Modifier</Text>
+                            </TouchableOpacity> */}
 
                             <TouchableOpacity
                                 onPress={() => deleteUser(item.id)}
@@ -165,4 +168,6 @@ const DocumentScreen = () => {
     );
 };
 
-export default DocumentScreen;
+export default UserScreen;
+
+
