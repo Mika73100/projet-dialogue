@@ -74,6 +74,7 @@ const UserScreen = () => {
     const [users, setUsers] = useState([]);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [copro, setCopro] = useState('');
 
     const fetchUsers = async () => {
         try {
@@ -88,6 +89,7 @@ const UserScreen = () => {
                     id: document.id,
                     email: user.email,
                     password: user.password,
+                    copro: user.copro,
                 });
             });
 
@@ -103,7 +105,7 @@ const UserScreen = () => {
     }, []);
 
     const createUser = () => {
-        if(email === '' || password === ''){
+        if(email === '' || password === '' || copro === ''){
             Alert.alert("Erreur", "Remplissez tous les champs")
         }
         else {
@@ -112,10 +114,12 @@ const UserScreen = () => {
                     await addDoc(collection(db, "Users"), {
                         userId: res.user.uid,
                         email: res.user.email,
+                        copro: copro,
                     });
                     console.log('Utilisateur créé avec succès.');
                     setEmail(''); // Réinitialisez les champs email et password
                     setPassword('');
+                    setCopro('');
                     fetchUsers(); // Actualisez la liste des utilisateurs
                 })
                 .catch((error) => console.log(error.message));
@@ -161,6 +165,7 @@ const UserScreen = () => {
                 value={email}
                 onChangeText={setEmail}
             />
+
             <TextInput
                 placeholder="Mot de passe"
                 secureTextEntry={true}
@@ -173,6 +178,20 @@ const UserScreen = () => {
                 value={password}
                 onChangeText={setPassword}
             />
+
+            <TextInput
+                placeholder="N° de corpo"
+                style={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                    padding: 5,
+                    marginBottom: 10,
+                }}
+                maxLength={5}
+                value={copro}
+                onChangeText={setCopro}
+            />
+
             <TouchableOpacity
                 onPress={createUser}
                 style={{
@@ -182,6 +201,7 @@ const UserScreen = () => {
                     alignItems: 'center',
                 }}
             >
+
                 <Text style={{ color: 'white' }}>Créer un Utilisateur</Text>
             </TouchableOpacity>
 

@@ -77,6 +77,7 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
                             placeholder='code'
                             keyboardType='numeric'
                             autoCorrect={false}
+                            maxLength={5}
                             value={code}
                             onChangeText={setCode}
                         />

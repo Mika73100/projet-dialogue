@@ -64,9 +64,9 @@ const LoginScreen = () => {
           </View>
 
           <View className='mt-5 text-400 text-2xl font-semibold text-center'>
-            <Text className='text-center font-light tracking-wider'>Nouveau ici ?</Text>
+            <Text className='text-center font-light tracking-wider text-white'>Nouveau ici ?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Register') }>
-                <Text className='font-semibold text-center'>Inscription</Text>
+                <Text className='font-semibold text-center text-white'>Inscription</Text>
               </TouchableOpacity>
           </View>
 
