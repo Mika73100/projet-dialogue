@@ -22,7 +22,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
   const [lastname, setLastname] = useState('');
   const [phone, setPhone] = useState('');
   const [adress, setAdress] = useState('');
-  const [copro, setCopro] = useState('');
+  const [code, setCode] = useState('');
   const [bio, setBio] = useState('');
 
   const [isLoading, setIsLoading] = useState(false)
@@ -38,19 +38,19 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
     const querySnapshot = await getDocs(queryResult)
     querySnapshot.forEach((doc) => {
       if (userEmail === '') {
-        const {email, username, firstname, phone, lastname, adress, copro, profilePic, bio} = doc.data()
+        const {email, username, firstname, phone, lastname, adress, code, profilePic, bio} = doc.data()
         setUsername(username)
         setUserEmail(email)
         setFirstname(firstname)
         setPhone(phone)
         setLastname(lastname)
         setAdress(adress)
-        setCopro(copro)
+        setCode(code)
 
         setUserAvatarUrl(profilePic)
         setUserImageUrl(profilePic)
         setBio(bio);
-
+        //console.log(phone);
       }
     })
   }
@@ -72,7 +72,6 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
       quality: 1,
     });
 
-    //console.log(result);
 
     if (!result.canceled) {
       uploadImage(result.assets[0].uri);
@@ -128,13 +127,16 @@ const update = async () => {
     setIsLoading(true);
 
     const querySnapshot = await getDocs(queryResult);
+   //console.log(querySnapshot);
     querySnapshot.forEach(async (document) => {
+      //console.log(phone);
       await updateDoc(doc(db, 'Users', document.id), {
         bio: bio,
         phone: phone, // Update the 'bio' field with the new bio text
         firstname: firstname,
         lastname: lastname,
-        adress: adress
+        adress: adress,
+        code: code
       }).then(() => {
         setIsLoading(false);
         // Réinitialisez la valeur du texte bio après la sauvegarde réussie
@@ -190,7 +192,6 @@ const update = async () => {
                   value={firstname}
                   onChangeText={(text) => setFirstname(text)}
                   placeholder={firstname ? firstname : "Enter your firstname..."}
-                  onPressIn={update}
                 />
 
                 <TextInput 
@@ -198,7 +199,6 @@ const update = async () => {
                   value={lastname}
                   onChangeText={(text) => setLastname(text)}
                   placeholder={lastname ? lastname : "Enter your lastname..."}
-                  onPressIn={update}
                 />
 
                 <TextInput 
@@ -206,7 +206,6 @@ const update = async () => {
                   value={adress}
                   onChangeText={(text) => setAdress(text)}
                   placeholder={adress ? adress : "Enter your adress..."}
-                  onPressIn={update}
                 />
                 
                 <TextInput 
@@ -215,11 +214,10 @@ const update = async () => {
                   keyboardType='numeric'
                   onChangeText={(text) => setPhone(text)}
                   placeholder={phone ? phone : "Enter your phone..."}
-                  onPressIn={update}
-                ></TextInput>
+                />
 
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Email: {userEmail}</Text>
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Nom de copropriete: {copro}</Text>
+                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Code de copro: {code}</Text>
             </View>
           </View>
 
@@ -232,16 +230,15 @@ const update = async () => {
                 placeholder={bio ? bio : "Enter your bio..."}
                 multiline
                 numberOfLines={4}
-                onPressIn={update}
-              />
+              /> 
 
 
         </View>
       </View>
 
-      <TouchableOpacity onPress={update} className="bg-orange-600 py-2 rounded-md mx-8 mt-5 mb-3">
+      <TouchableOpacity onPress={update} className="bg-blue-600 py-2 rounded-md mx-8 mt-5 mb-3">
               <Text className="text-center font-semibold text-white text-lg">
-                Save Bio
+                Save
               </Text>
       </TouchableOpacity>
       
