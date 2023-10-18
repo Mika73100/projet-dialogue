@@ -8,6 +8,7 @@ import { AuthenticatedUserContext } from '../../../context/AuthticationContext';
 
 
 const FactureScreen = () => {
+    
     const [users, setUsers] = useState([]);
     const storage = getStorage();
     const [selectedUserId, setSelectedUserId] = useState(null);
@@ -44,7 +45,7 @@ const FactureScreen = () => {
             const result = await DocumentPicker.getDocumentAsync({
                 type: 'application/pdf',
                 copyToCacheDirectory: false, // Ne pas copier dans le répertoire de cache
-            });
+              });
 
             if (!result.canceled) {
                 setSelectedUserId(result.assets[0].uri);
@@ -155,13 +156,3 @@ const FactureScreen = () => {
 };
 
 export default FactureScreen;
-
-
-
-
-
-
-
-
-
-

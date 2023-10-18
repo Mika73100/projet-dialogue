@@ -1,129 +1,67 @@
-
-
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import { collection, query, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { auth, db } from '../../../firebase/config';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { collection, query, getDocs } from 'firebase/firestore';
+import { db } from '../../../firebase/config';
+import * as DocumentPicker from 'expo-document-picker';
 
+const CoproScreen = () => {
+    const [copro, setCopro] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-const UserScreen = () => {
-    const [users, setUsers] = useState([]);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const fetchUsers = async () => {
+    // Fonction pour récupérer les copropriétés
+    const fetchCopro = async () => {
         try {
-            const userQuery = query(collection(db, 'Users'));
-            const querySnapshot = await getDocs(userQuery);
+            const coproQuery = query(collection(db, 'Copro'));
+            const querySnapshot = await getDocs(coproQuery);
 
-            const userData = [];
+            const coproData = [];
 
             querySnapshot.forEach((document) => {
-                const user = document.data();
-                userData.push({
+                const copro = document.data();
+                coproData.push({
                     id: document.id,
-                    email: user.email,
-                    password: user.password,
+                    copro: copro.copro, // Remplacez par le champ approprié
+                    // Autres champs de copropriété ici
                 });
             });
 
-            setUsers(userData);
+            setCopro(coproData);
         } catch (error) {
-            console.error('Erreur lors de la récupération des utilisateurs :', error);
+            Alert.alert('Erreur', error.message);
         }
     };
 
     useEffect(() => {
-        // Chargez la liste des utilisateurs au chargement de la page
-        fetchUsers();
+        fetchCopro(); // Appel pour récupérer les copropriétés
     }, []);
 
-    const createUser = () => {
-        if(email === '' || password === ''){
-            Alert.alert("Erreur", "Remplissez tous les champs")
-        }
-        else {
-            createUserWithEmailAndPassword(auth, email, password)
-                .then(async (res) => {
-                    await addDoc(collection(db, "Users"), {
-                        userId: res.user.uid,
-                        email: res.user.email,
-                    });
-                    console.log('Utilisateur créé avec succès.');
-                    setEmail(''); // Réinitialisez les champs email et password
-                    setPassword('');
-                    fetchUsers(); // Actualisez la liste des utilisateurs
-                })
-                .catch((error) => console.log(error.message));
-        }
-    }
-
-    const deleteUser = async (userId) => {
+    const pickPdf = async (coproId) => {
         try {
-            const userDocRef = doc(db, 'Users', userId);
-            await deleteDoc(userDocRef);
-            console.log('Utilisateur supprimé avec succès.');
-            fetchUsers(); // Actualisez la liste des utilisateurs
+            const result = await DocumentPicker.getDocumentAsync({
+                type: 'application/pdf',
+                copyToCacheDirectory: false,
+            });
+
+            if (!result.canceled) {
+                // Vous pouvez téléverser le PDF à la copropriété ici
+                // Utilisez coproId pour associer le PDF à la copropriété
+                setIsLoading(true);
+                // Téléversement du PDF...
+                setIsLoading(false);
+            }
         } catch (error) {
-            console.error('Erreur lors de la suppression de l\'utilisateur :', error);
+            Alert.alert('Taille de PDF excessif', error.message);
         }
     };
-
-    // const updateUser = async (userId, updatedUserData) => {
-    //     try {
-    //         const userDocRef = doc(db, 'Users', userId);
-    //         await updateDoc(userDocRef, updatedUserData);
-    //         console.log('Utilisateur mis à jour avec succès.');
-    //         fetchUsers(); // Actualisez la liste des utilisateurs
-    //     } catch (error) {
-    //         console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
-    //     }
-    // };
 
     return (
         <View style={{ flex: 1, padding: 20 }}>
             <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
-                Liste des Utilisateurs
+                Liste des Copropriétés
             </Text>
 
-            <TextInput
-                placeholder="Email"
-                style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                    padding: 5,
-                    marginBottom: 10,
-                }}
-                value={email}
-                onChangeText={setEmail}
-            />
-            <TextInput
-                placeholder="Mot de passe"
-                secureTextEntry={true}
-                style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                    padding: 5,
-                    marginBottom: 10,
-                }}
-                value={password}
-                onChangeText={setPassword}
-            />
-            <TouchableOpacity
-                onPress={createUser}
-                style={{
-                    backgroundColor: 'blue',
-                    padding: 10,
-                    borderRadius: 5,
-                    alignItems: 'center',
-                }}
-            >
-                <Text style={{ color: 'white' }}>Créer un Utilisateur</Text>
-            </TouchableOpacity>
-
             <FlatList
-                data={users}
+                data={copro}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View
@@ -135,30 +73,19 @@ const UserScreen = () => {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Text>{item.email}</Text>
-                        
+                        <Text>{item.copro}</Text>
+
                         <View style={{ flexDirection: 'row' }}>
-                            {/* <TouchableOpacity
-                                onPress={() => updateUser(item.id, { email: 'nouveau@email.com', password: 'nouveaumdp' })}
+                            <TouchableOpacity
+                                onPress={() => pickPdf(item.id)}
                                 style={{
-                                    backgroundColor: 'green',
+                                    backgroundColor: 'blue',
                                     padding: 5,
                                     borderRadius: 3,
                                     marginRight: 5,
                                 }}
                             >
-                                <Text style={{ color: 'white' }}>Modifier</Text>
-                            </TouchableOpacity> */}
-
-                            <TouchableOpacity
-                                onPress={() => deleteUser(item.id)}
-                                style={{
-                                    backgroundColor: 'red',
-                                    padding: 5,
-                                    borderRadius: 3,
-                                }}
-                            >
-                                <Text style={{ color: 'white' }}>Supprimer</Text>
+                                <Text style={{ color: 'white' }}>Ajouter PDF </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -168,6 +95,4 @@ const UserScreen = () => {
     );
 };
 
-export default UserScreen;
-
-
+export default CoproScreen;

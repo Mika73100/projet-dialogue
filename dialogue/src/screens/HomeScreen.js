@@ -88,7 +88,14 @@ const HomeScreen = () => {
             <Text style={{ color: 'white' }}>Admin</Text>
           </TouchableOpacity>
         </View>
-      ) : null}
+      ) :         
+      
+      <View className='flex flex-row-reverse absolute bottom-[10%] left-[7%]'>
+        <TouchableOpacity onPress={() => navigation.navigate('Facture')} style={{ backgroundColor: 'blue', height: 60, width: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name="document-text-outline" size={25} color="white" />
+            <Text style={{ color: 'white' }}>Facture</Text>
+          </TouchableOpacity>
+        </View>}
     </View>
   );
 }

@@ -12,7 +12,9 @@ import { auth } from './firebase/config';
 import ProfileScreen from './src/screens/ProfileScreen';
 import HelpScreen from './src/screens/HelpScreen';
 import SearchScreen from './src/screens/SearchScreen';
+import FactureScreenUser from './src/screens/FactureScreenUser';
 import MessageScreen from './src/components/MessageScreen';
+
 
 ////////////////////ADMIN///////////////////////////////
 import AdminScreen from './src/screens/admin/AdminScreen';
@@ -95,6 +97,18 @@ function MainStack(){
         name='Message' 
         component={MessageScreen} />
 
+        <Stack.Screen options={{
+        headerTitle:'Facture',
+        headerTintColor:'#ffffff',
+        headerTitleStyle: { fontWeight: 'bold'},
+        headerStyle:{backgroundColor:'blue'},
+        headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
+        }}
+        name='Facture' 
+        component={FactureScreenUser} />
+
+        {/* {////////////////////////ICI PAGES ADMIN////////////////////////} */}
 
         <Stack.Screen options={{
         headerTitle:'Admin',

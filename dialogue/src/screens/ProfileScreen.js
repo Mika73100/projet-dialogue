@@ -90,7 +90,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
         };
         xhr.onerror = function (e) {
           //console.log(e);
-          reject(new TypeError("Network request failed"));
+          reject(new TypeError("Attention erreur du code d'import medias"));
         };
         xhr.responseType = "blob";
         xhr.open("GET", image, true);

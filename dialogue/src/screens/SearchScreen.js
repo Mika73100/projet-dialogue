@@ -144,7 +144,7 @@ const SearchScreen = () => {
           <View className='items-center mx-5'>
             <Text className='text-2xl font-bold text-gray-500'>Aucun utilisateur trouvé !</Text>
             <Image source={gadget} className='h-30 w-25' />
- 
+
           </View>
         )
       }

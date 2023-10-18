@@ -46,7 +46,7 @@ const ButtonGroup = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        marginBottom: 15,
     },
     btnGroup: {
         flexDirection: 'row',
