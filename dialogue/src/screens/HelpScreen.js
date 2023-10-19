@@ -51,12 +51,14 @@ const HelpScreen = () => {
                         onChangeText={text => setTextInput(text)}
                         placeholder='Pose moi une question'
                     />
+                    
                     <TouchableOpacity
                     style={styles.button}
                     onPress={handleSend}
                     >
                         <Text style={styles.buttonText}>Let's Go</Text>
                     </TouchableOpacity>
+                    
         </View>
     )
 }

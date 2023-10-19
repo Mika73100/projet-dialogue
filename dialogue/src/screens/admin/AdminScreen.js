@@ -3,11 +3,10 @@ import { View, Text, FlatList, TextInput, TouchableOpacity, Alert, Image } from 
 import { collection, query, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../../firebase/config';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
 import ButtonGroup from '../../components/ButtonGroup'
 
 const CoproScreen = () => {
-    const navigation = useNavigation();
+
     const [copro, setCopro] = useState([]);
     const [coproName, setCoproName] = useState('');
     const [coproCode, setCoproCode] = useState('');
@@ -113,6 +112,7 @@ const CoproScreen = () => {
                     padding: 5,
                     marginBottom: 10,
                 }}
+                maxLength={5}
                 value={coproCode}
                 onChangeText={setCoproCode}
             />

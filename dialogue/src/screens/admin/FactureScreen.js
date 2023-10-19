@@ -40,12 +40,14 @@ const FactureScreen = () => {
         DocFinder(queryResult);
     }, []);
 
+    ////////////////////ici le code pour le pdf ////////////////////////////////
+
     const pickPdf = async () => {
         try {
             const result = await DocumentPicker.getDocumentAsync({
                 type: 'application/pdf',
                 copyToCacheDirectory: false, // Ne pas copier dans le répertoire de cache
-              });
+            });
 
             if (!result.canceled) {
                 setSelectedUserId(result.assets[0].uri);
@@ -88,6 +90,8 @@ const FactureScreen = () => {
         }
     };
 
+    ////////////////////////////ici fetch les user/////////////////////////////
+
     const fetchUsers = async () => {
         try {
             const userQuery = query(collection(db, 'Users'));
@@ -113,6 +117,9 @@ const FactureScreen = () => {
     useEffect(() => {
         fetchUsers();
     }, []);
+
+    /////////////////////////ici la vue /////////////////////////////////////
+
 
     return (
         <View style={{ flex: 1, padding: 20 }}>

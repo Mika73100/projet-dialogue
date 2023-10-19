@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { collection, query, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../../firebase/config';
 import * as DocumentPicker from 'expo-document-picker';
+import { getDownloadURL, ref, uploadBytes, getStorage } from 'firebase/storage';
 
-const CoproScreen = () => {
+const DocumentScreen = () => {
     const [copro, setCopro] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const storage = getStorage();
 
     // Fonction pour récupérer les copropriétés
     const fetchCopro = async () => {
@@ -39,14 +41,27 @@ const CoproScreen = () => {
         try {
             const result = await DocumentPicker.getDocumentAsync({
                 type: 'application/pdf',
-                copyToCacheDirectory: false,
+                copyToCacheDirectory: false, // Ne pas copier dans le répertoire de cache
             });
 
             if (!result.canceled) {
-                // Vous pouvez téléverser le PDF à la copropriété ici
-                // Utilisez coproId pour associer le PDF à la copropriété
                 setIsLoading(true);
-                // Téléversement du PDF...
+
+                const blob = await fetch(result.uri).then((response) => response.blob());
+
+                const filename = result.uri.substring(result.uri.lastIndexOf('/'));
+                const pdfRef = ref(storage, `PDFs/${filename}`);
+
+                await uploadBytes(pdfRef, blob);
+
+                const downloadUrl = await getDownloadURL(pdfRef);
+
+                // Mise à jour de la copropriété avec le downloadUrl
+                const coproDocRef = doc(db, 'Copro', coproId);
+                await updateDoc(coproDocRef, {
+                    documents: arrayUnion(downloadUrl),
+                });
+
                 setIsLoading(false);
             }
         } catch (error) {
@@ -85,7 +100,7 @@ const CoproScreen = () => {
                                     marginRight: 5,
                                 }}
                             >
-                                <Text style={{ color: 'white' }}>Ajouter PDF </Text>
+                                <Text style={{ color: 'white' }}>Ajouter PDF</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -95,4 +110,4 @@ const CoproScreen = () => {
     );
 };
 
-export default CoproScreen;
+export default DocumentScreen;

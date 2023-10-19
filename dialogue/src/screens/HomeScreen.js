@@ -1,6 +1,6 @@
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { AuthenticatedUserContext } from '../../context/AuthticationContext';
@@ -10,23 +10,19 @@ const userAvatar = require("../../assets/profile.png");
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-
-  //Ici, je récupère des informations via le context API
-  const { user, userAvatrUrl, setUserAvatarUrl } = useContext(AuthenticatedUserContext);
-
+  const { user, userAvatarUrl, setUserAvatarUrl } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
-  
-  //je crée le state de mon admin pour l'utiliser dans la visibilité de mon button.
   const [isAdmin, setIsAdmin] = useState(false);
+  const [coproCode, setCoproCode] = useState(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
-          {!userAvatrUrl ? (
+          {!userAvatarUrl ? (
             <Image source={userAvatar} style={{ height: 40, width: 40, borderRadius: 20 }} />
           ) : (
-            <Image source={{ uri: userAvatrUrl }} style={{ height: 40, width: 40, borderRadius: 20 }} />
+            <Image source={{ uri: userAvatarUrl }} style={{ height: 40, width: 40, borderRadius: 20 }} />
           )}
         </TouchableOpacity>
       ),
@@ -37,7 +33,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
       )
     });
-  }, [navigation, userAvatrUrl]);
+  }, [navigation, userAvatarUrl]);
 
   useEffect(() => {
     if (!user) return;
@@ -60,6 +56,8 @@ const HomeScreen = () => {
     const queryResult = query(UserRef, where('email', '==', user.email));
     DocFinder(queryResult);
   }, [user, setUserAvatarUrl]);
+
+///////////////////////////////////////////////////////////////////////////////
 
   return (
     <View style={{ flex: 1 }}>

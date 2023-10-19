@@ -187,34 +187,70 @@ const update = async () => {
         <View className="flex justify-end px-4 pt-4">
             <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
 
-                <TextInput 
-                  className="pt-4 text-sm text-gray-500 dark:text-gray-400"
-                  value={firstname}
-                  onChangeText={(text) => setFirstname(text)}
-                  placeholder={firstname ? firstname : "Enter your firstname..."}
-                />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ marginRight: 10 }}>Nom : </Text>
+                  <TextInput
+                    style={{
+                      padding: 4,
+                      fontSize: 14,
+                      color: 'gray', // Couleur du texte
+                    }}
+                    value={firstname}
+                    onChangeText={(text) => setLastname(text)}
+                    placeholder={firstname ? firstname : "Entrez votre nom de famille..."}
+                  />
+                </View>
 
-                <TextInput 
-                  className="pt-4 text-sm text-gray-500 dark:text-gray-400"
-                  value={lastname}
-                  onChangeText={(text) => setLastname(text)}
-                  placeholder={lastname ? lastname : "Enter your lastname..."}
-                />
 
-                <TextInput 
-                  className="pt-4 text-sm text-gray-500 dark:text-gray-400"
-                  value={adress}
-                  onChangeText={(text) => setAdress(text)}
-                  placeholder={adress ? adress : "Enter your adress..."}
-                />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ marginRight: 10 }}>Prenom : </Text>
+                  <TextInput
+                    style={{
+                      padding: 4,
+                      fontSize: 14,
+                      color: 'gray', // Couleur du texte
+                    }}
+                    value={lastname}
+                    onChangeText={(text) => setLastname(text)}
+                    placeholder={lastname ? lastname : "Entrez votre prenom..."}
+                  />
+                </View>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ marginRight: 10 }}>Adresse : </Text>
+                  <TextInput
+                    style={{
+                      padding: 4,
+                      fontSize: 14,
+                      color: 'gray', // Couleur du texte
+                      flex: 1, // Pour que le TextInput occupe tout l'espace restant
+                    }}
+                    value={adress}
+                    onChangeText={(text) => setAdress(text)}
+                    placeholder={adress ? adress : "Entrez votre adresse..."}
+                    multiline
+                    numberOfLines={4}
+                  />
+                </View>
+
                 
-                <TextInput 
-                  className="pt-4 text-sm text-gray-500 dark:text-gray-400"
-                  value={phone}
-                  keyboardType='numeric'
-                  onChangeText={(text) => setPhone(text)}
-                  placeholder={phone ? phone : "Enter your phone..."}
-                />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ marginRight: 10 }}>Telephone : </Text>
+                  <TextInput
+                    style={{
+                      padding: 4,
+                      fontSize: 14,
+                      color: 'gray', // Couleur du texte
+                      flex: 1, // Pour que le TextInput occupe tout l'espace restant
+                    }}
+                    value={phone}
+                    onChangeText={(text) => setAdress(text)}
+                    placeholder={phone ? phone : "Entrez votre telephone..."}
+                    multiline
+                    numberOfLines={4}
+                  />
+                </View>
+
 
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Email: {userEmail}</Text>
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Code de copro: {code}</Text>
@@ -236,7 +272,7 @@ const update = async () => {
         </View>
       </View>
 
-      <TouchableOpacity onPress={update} className="bg-blue-600 py-2 rounded-md mx-8 mt-5 mb-3">
+      <TouchableOpacity onPress={update} className="bg-blue-700 py-2 rounded-md mx-8 mt-5 mb-3">
               <Text className="text-center font-semibold text-white text-lg">
                 Save
               </Text>
