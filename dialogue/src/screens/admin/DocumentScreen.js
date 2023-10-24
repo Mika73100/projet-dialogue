@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { collection, query, getDocs, doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { collection, query, getDocs, doc, addDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebase/config';
 import * as DocumentPicker from 'expo-document-picker';
 import { getDownloadURL, ref, uploadBytes, getStorage } from 'firebase/storage';
 
 const DocumentScreen = () => {
+
     const [copro, setCopro] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const storage = getStorage();
@@ -37,6 +38,10 @@ const DocumentScreen = () => {
         fetchCopro(); // Appel pour récupérer les copropriétés
     }, []);
 
+    
+    ////////////////////ici le code pour le pdf ////////////////////////////////
+
+
     const pickPdf = async (coproId) => {
         try {
             const result = await DocumentPicker.getDocumentAsync({
@@ -47,9 +52,9 @@ const DocumentScreen = () => {
             if (!result.canceled) {
                 setIsLoading(true);
 
-                const blob = await fetch(result.uri).then((response) => response.blob());
+                const blob = await fetch(result.assets[0].uri).then((response) => response.blob());
 
-                const filename = result.uri.substring(result.uri.lastIndexOf('/'));
+                const filename = result.assets[0].uri.substring(result.assets[0].uri.lastIndexOf('/'));
                 const pdfRef = ref(storage, `PDFs/${filename}`);
 
                 await uploadBytes(pdfRef, blob);
@@ -57,11 +62,23 @@ const DocumentScreen = () => {
                 const downloadUrl = await getDownloadURL(pdfRef);
 
                 // Mise à jour de la copropriété avec le downloadUrl
-                const coproDocRef = doc(db, 'Copro', coproId);
-                await updateDoc(coproDocRef, {
-                    documents: arrayUnion(downloadUrl),
+                const docRef = await addDoc(collection(db, "Document"), {
+                    filename: downloadUrl,
                 });
 
+                const coproDocRef = doc(db, 'Copro', coproId);
+                const nouvellesDonnees = {
+                // Ajoutez ici les champs que vous souhaitez mettre à jour
+                document_id:docRef.id,
+                // ...
+                };
+                try {
+                await updateDoc(coproDocRef, nouvellesDonnees);
+                console.log('Document "copro" mis à jour avec succès !');
+                } catch (error) {
+                console.error('Erreur lors de la mise à jour du document "copro" :', error);
+                }
+                //console.log(querySnapshot);
                 setIsLoading(false);
             }
         } catch (error) {

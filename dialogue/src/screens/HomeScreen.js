@@ -2,18 +2,29 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
 import { AuthenticatedUserContext } from '../../context/AuthticationContext';
 import { db } from '../../firebase/config';
 
+
+/////// j'importe la photo ////////
 const userAvatar = require("../../assets/profile.png");
+
+
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const { user, userAvatarUrl, setUserAvatarUrl } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [coproCode, setCoproCode] = useState(null);
+
+  ///////////////////////////////////////
+  const [copro, setCopro] = useState([]);
+  const [code, setCode] = useState('');
+
+
+
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -57,19 +68,102 @@ const HomeScreen = () => {
     DocFinder(queryResult);
   }, [user, setUserAvatarUrl]);
 
+
+
+////////////////////////////////ici la modification///////////////////////////
+
+
+
+
+
+
+const fetchCopro = async () => {
+  try {
+    const coproQuery = query(collection(db, 'Copro'));
+    const querySnapshot = await getDocs(coproQuery);
+
+    const coproData = [];
+
+    querySnapshot.forEach((document) => {
+      const copro = document.data();
+
+      coproData.push({
+        id: document.id,
+        copro: copro, // Remplacez par le champ approprié
+        code: code, // Utilisez le code de l'utilisateur ici
+        // Autres champs de copropriété ici
+      });
+    });
+
+    setCopro(coproData);
+    //console.log(copro);
+  } catch (error) {
+    Alert.alert('Erreur', error.message);
+  }
+};
+
+const CoproRef = collection(db, "Copro");
+const queResult = query(CoproRef, where('code', '==', user.email));
+useEffect(() => {
+  fetchCopro(queResult); // Appel pour récupérer les copropriétés
+}, []);
+
+//console.log(CoproRef);
+
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
   return (
     <View style={{ flex: 1 }}>
-      {isLoading ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size='large' color='red' />
-        </View>
-      ) : (
-        <FlatList
-          // Ajoutez ici les données à afficher dans votre FlatList
-        />
-      )}
+
+        <TouchableOpacity onPress={''} className="bg-blue-700 py-4 h-40 rounded-md mx-8 mt-10">
+            <Text className="text-center font-semibold text-white text-lg h-full">
+                  {copro.code}
+            </Text>
+          {/* <ImageBackground source={''} style="w-full h-full bg-red-400 text-gray-500">
+              <Text className="text-center font-semibold text-white text-lg h-full">
+                {code}
+              </Text>
+          </ImageBackground> */}
+        </TouchableOpacity>
+
+
+        <TouchableOpacity onPress={''} className="bg-blue-700 py-4 h-40 rounded-md mx-8 mt-10">
+            <Text className="text-center font-semibold text-white text-lg h-full">
+                  {copro.code}
+            </Text>
+          {/* <ImageBackground source={''} style="w-full h-full bg-red-400 text-gray-500">
+              <Text className="text-center font-semibold text-white text-lg h-full">
+                {code}
+              </Text>
+          </ImageBackground> */}
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={''} className="bg-blue-700 py-4 h-40 rounded-md mx-8 mt-10">
+            <Text className="text-center font-semibold text-white text-lg h-full">
+                  {copro.code}
+            </Text>
+          {/* <ImageBackground source={''} style="w-full h-full bg-red-400 text-gray-500">
+              <Text className="text-center font-semibold text-white text-lg h-full">
+                {code}
+              </Text>
+          </ImageBackground> */}
+        </TouchableOpacity>
+
+        
+      
+
+
+
+{
+  /////////////////////////////////////////////////////////////////////////////
+}
+
+
+
 
       <View className='flex flex-row-reverse absolute bottom-[10%] right-[7%]'>
         <View>
@@ -100,3 +194,18 @@ const HomeScreen = () => {
 
 
 export default HomeScreen;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

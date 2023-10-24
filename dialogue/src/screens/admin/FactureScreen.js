@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { collection, query, getDocs, doc, updateDoc, where } from 'firebase/firestore';
+import { collection, query, getDocs, doc, addDoc, where } from 'firebase/firestore';
 import { db, UserRef } from '../../../firebase/config';
 import * as DocumentPicker from 'expo-document-picker';
 import { getDownloadURL, ref, uploadBytes, getStorage } from 'firebase/storage';
@@ -42,7 +42,7 @@ const FactureScreen = () => {
 
     ////////////////////ici le code pour le pdf ////////////////////////////////
 
-    const pickPdf = async () => {
+    const pickPdf = async (id) => {
         try {
             const result = await DocumentPicker.getDocumentAsync({
                 type: 'application/pdf',
@@ -51,7 +51,7 @@ const FactureScreen = () => {
 
             if (!result.canceled) {
                 setSelectedUserId(result.assets[0].uri);
-                uploadPdf(selectedUserId, result.assets[0].uri);
+                uploadPdf(id, result.assets[0].uri);
             }
         } catch (error) {
             Alert.alert('Taille de PDF excessif', error.message);
@@ -71,15 +71,10 @@ const FactureScreen = () => {
 
             const downloadUrl = await getDownloadURL(pdfRef);
 
-            const querySnapshot = await getDocs(queryResult);
-            querySnapshot.forEach(async (document) => {
-                try {
-                    await updateDoc(doc(db, 'Users', document.id), {
-                        facture: downloadUrl,
-                    });
-                } catch (error) {
-                    Alert.alert('Erreur', error.message);
-                }
+
+            await addDoc(collection(db, "Facture"), {
+                userId: userId,
+                filename: downloadUrl,
             });
 
             setIsLoading(false);

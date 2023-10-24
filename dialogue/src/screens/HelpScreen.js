@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import HorairesScreen from '../components/HorairesScreen';
 
 const HelpScreen = () => {
 
@@ -17,81 +18,48 @@ const HelpScreen = () => {
             temperature: 0.5
         }, {
             headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
             }
         })
         const text = response.data.choices[0].text;
-        setData([...data, {type: 'user', 'text': textInput}, {type: 'bot', 'text': text}])
+        setData([...data, { type: 'user', 'text': textInput }, { type: 'bot', 'text': text }])
         setTextInput('');
     }
 
     return (
-        <View style={styles.container}>
-                <FlatList 
+        <View className="flex h-full items-center justify-center">
+            <View className="bg-white p-4 mb-50 w-full h-full max-w-screen-md">
+                <FlatList
                     data={data}
                     keyExtractor={(item, index) => index.toString()}
-                    style={styles.body}
-                    renderItem={({item}) => (
-                        <View style={{flexDirection: 'row', padding:10}}>
-                                <Text style={{fontWeight: 'bold', color: item.type === 'user' ? 'green' : 'red'}}>
-                                    {item.type === 'user' ? 'Vous :' : 'Bot :' }
-                                </Text>
-                                
-                                <Text style={styles.bot}>
-                                    {item.text}
-                                </Text>
+                    renderItem={({ item }) => (
+                        <View className="flex flex-row p-2">
+                            <Text className={`font-bold text-${item.type === 'user' ? 'green' : 'red'}`}>
+                                {item.type === 'user' ? 'Vous :' : 'Bot :'}
+                            </Text>
+
+                            <Text className="text-base items-center justify-center ml-2">{item.text}</Text>
                         </View>
-                    )}  
+                    )}
                 />
-                
-                    <TextInput 
-                        style={styles.input}
-                        value={textInput}
-                        onChangeText={text => setTextInput(text)}
-                        placeholder='Pose moi une question'
-                    />
-                    
-                    <TouchableOpacity
-                    style={styles.button}
+
+                <TextInput
+                    className="border border-black w-full h-12 mb-4 rounded-lg p-2"
+                    value={textInput}
+                    onChangeText={(text) => setTextInput(text)}
+                    placeholder="Posez-moi une question..."
+                />
+
+                <TouchableOpacity
+                    className="bg-blue-600 h-12 rounded-lg items-center justify-center mb-20"
                     onPress={handleSend}
-                    >
-                        <Text style={styles.buttonText}>Let's Go</Text>
-                    </TouchableOpacity>
-                    
+                >
+                    <Text className="text-white font-bold text-base">Let's Go</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-    )
-}
+    );
+};
 
 export default HelpScreen
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: 'black',
-        width: '90%',
-        height: 60,
-        marginBottom: 10,
-        borderRadius: 10
-    },
-    button: {
-        backgroundColor: 'yellow',
-        height:60,
-        borderRadius:10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom:10,
-    },
-    buttonText: {
-        fontSize: 10,
-        fontWeight: 'bold',
-        color: 'blue'
-    }
-    
-})

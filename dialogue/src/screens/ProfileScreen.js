@@ -132,7 +132,7 @@ const update = async () => {
       //console.log(phone);
       await updateDoc(doc(db, 'Users', document.id), {
         bio: bio,
-        phone: phone, // Update the 'bio' field with the new bio text
+        phone: phone, 
         firstname: firstname,
         lastname: lastname,
         adress: adress,
@@ -196,7 +196,7 @@ const update = async () => {
                       color: 'gray', // Couleur du texte
                     }}
                     value={firstname}
-                    onChangeText={(text) => setLastname(text)}
+                    onChangeText={(text) => setFirstname(text)}
                     placeholder={firstname ? firstname : "Entrez votre nom de famille..."}
                   />
                 </View>
@@ -244,12 +244,13 @@ const update = async () => {
                       flex: 1, // Pour que le TextInput occupe tout l'espace restant
                     }}
                     value={phone}
-                    onChangeText={(text) => setAdress(text)}
+                    onChangeText={(text) => setPhone(text)}
                     placeholder={phone ? phone : "Entrez votre telephone..."}
                     multiline
                     numberOfLines={4}
                   />
                 </View>
+
 
 
                 <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Email: {userEmail}</Text>

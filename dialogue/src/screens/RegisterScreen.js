@@ -29,7 +29,7 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
             createUserWithEmailAndPassword(auth, email, password, code ).then(
                 //console.log('Utilisateur crée avec succes')
                 async(res) => await addDoc(collection(db, "Users"),{
-                    userId: res.user.uid,
+                    //userId: res.user.uid,
                     email: res.user.email,
                     username: res.user.email.split('@')[0],
                     code: code
