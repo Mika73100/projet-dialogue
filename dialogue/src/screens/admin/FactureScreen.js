@@ -59,6 +59,7 @@ const FactureScreen = () => {
     };
 
     const uploadPdf = async (userId, pdfFile) => {
+        //console.log(userId);
         try {
             setIsLoading(true);
 
@@ -73,7 +74,8 @@ const FactureScreen = () => {
 
 
             await addDoc(collection(db, "Facture"), {
-                userId: userId,
+                createdAt: new Date().toDateString(),
+                email: userId,
                 filename: downloadUrl,
             });
 
@@ -139,7 +141,7 @@ const FactureScreen = () => {
 
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity
-                                onPress={() => pickPdf(item.id)}
+                                onPress={() => pickPdf(item.email)}
                                 style={{
                                     backgroundColor: 'blue',
                                     padding: 5,

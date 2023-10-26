@@ -2,30 +2,33 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
+import { ActivityIndicator, Image, Text, TouchableOpacity, View, ImageBackground } from 'react-native';
 import { AuthenticatedUserContext } from '../../context/AuthticationContext';
 import { db } from '../../firebase/config';
 
 
-/////// j'importe la photo ////////
-const userAvatar = require("../../assets/profile.png");
+
+  /////////////// j'importe la photo /////////////
+  const userAvatar = require("../../assets/profile.png");
+  const message = require('../../assets/message.png')
+  const facture = require('../../assets/facture.png')
 
 
-
-const HomeScreen = () => {
+  
+  const HomeScreen = () => {
   const navigation = useNavigation();
   const { user, userAvatarUrl, setUserAvatarUrl } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  ///////////////////////////////////////
+
+
+  //////////////////ici je recupere la copro/////////////////////
   const [copro, setCopro] = useState([]);
   const [code, setCode] = useState('');
 
 
-
-
-
+  
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -39,7 +42,7 @@ const HomeScreen = () => {
       ),
 
       headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')}>
           <Ionicons name="search" size={24} color="white" />
         </TouchableOpacity>
       )
@@ -74,9 +77,6 @@ const HomeScreen = () => {
 
 
 
-
-
-
 const fetchCopro = async () => {
   try {
     const coproQuery = query(collection(db, 'Copro'));
@@ -96,7 +96,6 @@ const fetchCopro = async () => {
     });
 
     setCopro(coproData);
-    //console.log(copro);
   } catch (error) {
     Alert.alert('Erreur', error.message);
   }
@@ -108,55 +107,42 @@ useEffect(() => {
   fetchCopro(queResult); // Appel pour récupérer les copropriétés
 }, []);
 
-//console.log(CoproRef);
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 
-
-
-  return (
+  return(
     <View style={{ flex: 1 }}>
 
-        <TouchableOpacity onPress={''} className="bg-blue-700 py-4 h-40 rounded-md mx-8 mt-10">
+        <TouchableOpacity onPress={() => navigation.navigate('MessageScreen') } 
+                          className="bg-green-400 py-4 h-40 rounded-md mx-8 mt-10">
+          <ImageBackground source={ message } style="w-full h-full bg-red-400 text-gray-500">
             <Text className="text-center font-semibold text-white text-lg h-full">
-                  {copro.code}
+                  
             </Text>
-          {/* <ImageBackground source={''} style="w-full h-full bg-red-400 text-gray-500">
-              <Text className="text-center font-semibold text-white text-lg h-full">
-                {code}
-              </Text>
-          </ImageBackground> */}
+          </ImageBackground>
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={''} className="bg-blue-700 py-4 h-40 rounded-md mx-8 mt-10">
+        <TouchableOpacity onPress={() => navigation.navigate('FactureScreenUser') } 
+                          className="bg-amber-400 h-40 rounded-md mx-8 mt-10">
+          <ImageBackground source={ facture } style="w-full h-full bg-red-400 text-gray-500">
             <Text className="text-center font-semibold text-white text-lg h-full">
-                  {copro.code}
             </Text>
-          {/* <ImageBackground source={''} style="w-full h-full bg-red-400 text-gray-500">
-              <Text className="text-center font-semibold text-white text-lg h-full">
-                {code}
-              </Text>
-          </ImageBackground> */}
+          </ImageBackground>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={''} className="bg-blue-700 py-4 h-40 rounded-md mx-8 mt-10">
+        <TouchableOpacity onPress={() => navigation.navigate('DocumentCopro') } 
+                          className="bg-blue-700 py-4 h-40 rounded-md mx-8 mt-10">
             <Text className="text-center font-semibold text-white text-lg h-full">
-                  {copro.code}
+                  
             </Text>
-          {/* <ImageBackground source={''} style="w-full h-full bg-red-400 text-gray-500">
-              <Text className="text-center font-semibold text-white text-lg h-full">
-                {code}
-              </Text>
-          </ImageBackground> */}
         </TouchableOpacity>
 
         
       
-
-
 
 {
   /////////////////////////////////////////////////////////////////////////////
@@ -183,7 +169,7 @@ useEffect(() => {
       ) :         
       
       <View className='flex flex-row-reverse absolute bottom-[10%] left-[7%]'>
-        <TouchableOpacity onPress={() => navigation.navigate('Facture')} style={{ backgroundColor: 'blue', height: 60, width: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' }}>
+        <TouchableOpacity onPress={() => navigation.navigate('FactureScreenUser')} style={{ backgroundColor: 'blue', height: 60, width: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' }}>
               <Ionicons name="document-text-outline" size={25} color="white" />
             <Text style={{ color: 'white' }}>Facture</Text>
           </TouchableOpacity>
@@ -191,7 +177,6 @@ useEffect(() => {
     </View>
   );
 }
-
 
 export default HomeScreen;
 

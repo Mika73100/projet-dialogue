@@ -38,7 +38,7 @@ const DocumentScreen = () => {
         fetchCopro(); // Appel pour récupérer les copropriétés
     }, []);
 
-    
+
     ////////////////////ici le code pour le pdf ////////////////////////////////
 
 
@@ -68,15 +68,15 @@ const DocumentScreen = () => {
 
                 const coproDocRef = doc(db, 'Copro', coproId);
                 const nouvellesDonnees = {
-                // Ajoutez ici les champs que vous souhaitez mettre à jour
-                document_id:docRef.id,
-                // ...
+                    // Ajoutez ici les champs que vous souhaitez mettre à jour
+                    document_id: docRef.id,
+                    // ...
                 };
                 try {
-                await updateDoc(coproDocRef, nouvellesDonnees);
-                console.log('Document "copro" mis à jour avec succès !');
+                    await updateDoc(coproDocRef, nouvellesDonnees);
+                    console.log('Document "copro" mis à jour avec succès !');
                 } catch (error) {
-                console.error('Erreur lors de la mise à jour du document "copro" :', error);
+                    console.error('Erreur lors de la mise à jour du document "copro" :', error);
                 }
                 //console.log(querySnapshot);
                 setIsLoading(false);

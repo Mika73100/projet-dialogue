@@ -1,0 +1,23 @@
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const fonctionData = async() => {
+          const facturesCollection = collection(db, 'Users');
+          const q = query(facturesCollection, where('email', '==', user.email));
+          const querySnapshot = await getDocs(q);
+          
+          querySnapshot.forEach((doc) => {
+            const facture = doc.data();
+            setUser(facture)
+           //console.log(facture)
+          });
+          
+        }
+        fonctionData()
+        setIsLoading(false)
+      }
+      else {
+        setIsLoading(false)
+      }
+    })
+  }, [])
