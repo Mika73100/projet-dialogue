@@ -48,7 +48,7 @@ const FactureScreenUser = () => {
   ///////////////////////////////ICI DATE EN FRANCAIS//////////////////////////
 
 
-  const formatDateTimeFrench  = (dateString) => {
+  const formatDateTimeFrench = (dateString) => {
     const date = new Date(dateString);
 
     if (isNaN(date.getTime())) {
@@ -64,26 +64,25 @@ const FactureScreenUser = () => {
 
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
+    <View className="flex-1 tracking-widest text-center rounded-lg">
       {isLoading ? (
         <ActivityIndicator />
       ) : factures.length > 0 ? (
         <FlatList
+          className="flex-1 tracking-widest text-center rounded-lg"
           data={factures}
-          keyExtractor={( item,key) => key}
+          keyExtractor={(item, key) => key}
           renderItem={({ item }) => (
-
-            <View className="flex-1 items-center justify-center">
-              <Text>{formatDateTimeFrench(item.date)}
-                  <TouchableOpacity
-                      onPress={() => {
-                        Linking.openURL(item.filename); // Ouvrir le lien URL lorsque l'utilisateur appuie dessus
-                      }}
-                    >
-                  <Text style={{ color: 'blue', textDecorationLine: 'underline' }}> Télécharger PDF</Text>
-                </TouchableOpacity>
-              </Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(item.filename); // Ouvrir le lien URL lorsque l'utilisateur appuie dessus
+              }}
+            >
+              <View className="flex-1 items-center justify-center mt-5 tracking-widest text-center text-white bg-blue-500 rounded-lg mx-5">
+                <Text> Facture du : {formatDateTimeFrench(item.date)}</Text>
+                <Text className="flex-1 mt-5 tracking-widest text-center rounded-lg mx-5"> Télécharger PDF</Text>
+              </View>
+            </TouchableOpacity>
           )}
         />
       ) : (

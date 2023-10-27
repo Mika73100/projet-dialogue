@@ -11,8 +11,8 @@ import { db } from '../../firebase/config';
   /////////////// j'importe la photo /////////////
   const userAvatar = require("../../assets/profile.png");
   const message = require('../../assets/message.png')
-  const facture = require('../../assets/facture.png')
-
+  const facture = require('../../assets/Facture.png')
+  const immeublecorpo = require('../../assets/immeublecorpo.png')
 
   
   const HomeScreen = () => {
@@ -117,7 +117,7 @@ useEffect(() => {
     <View style={{ flex: 1 }}>
 
         <TouchableOpacity onPress={() => navigation.navigate('MessageScreen') } 
-                          className="bg-green-400 py-4 h-40 rounded-md mx-8 mt-10">
+                          className="bg-orange-200 h-40 rounded-md mx-8 mt-10">
           <ImageBackground source={ message } style="w-full h-full bg-red-400 text-gray-500">
             <Text className="text-center font-semibold text-white text-lg h-full">
                   
@@ -135,10 +135,11 @@ useEffect(() => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('DocumentCopro') } 
-                          className="bg-blue-700 py-4 h-40 rounded-md mx-8 mt-10">
+                          className="bg-indigo-600 h-40 rounded-md mx-8 mt-10">
+          <ImageBackground source={ immeublecorpo } style="w-full h-full bg-red-400 text-gray-500">
             <Text className="text-center font-semibold text-white text-lg h-full">
-                  
             </Text>
+          </ImageBackground>
         </TouchableOpacity>
 
         

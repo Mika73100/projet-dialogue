@@ -5,8 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthenticatedUserProvider, { AuthenticatedUserContext } from './context/AuthticationContext';
 import { useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, query, getDocs, where } from 'firebase/firestore';
-import { auth, db } from './firebase/config';
+import { auth } from './firebase/config';
 
 
 ///////////////////////////////////////////////////////////
@@ -193,19 +192,17 @@ function RootNavigator() {
   useEffect(() => {
     onAuthStateChanged(auth, (user)=>{
       if(user)
+      
       { setUser(user)
+        //console.log(user)
       setIsLoading(false)}
       else{
         setIsLoading(false);
       }
     });
-  
-    // Nettoyez le "unsubscribe" lorsque le composant se démonte.
-    return () => unsubscribe();
+    
   }, []);
   
-
-  //console.log('utilisateur =', user);
 
   return (
     <NavigationContainer>
