@@ -116,7 +116,7 @@ useEffect(() => {
   return(
     <View style={{ flex: 1 }}>
 
-        <TouchableOpacity onPress={() => navigation.navigate('MessageScreen') } 
+        <TouchableOpacity onPress={() => navigation.navigate('MessageScreen',{}) } 
                           className="bg-orange-200 h-40 rounded-md mx-8 mt-10">
           <ImageBackground source={ message } style="w-full h-full bg-red-400 text-gray-500">
             <Text className="text-center font-semibold text-white text-lg h-full">

@@ -74,6 +74,7 @@ const FactureScreen = () => {
 
 
             await addDoc(collection(db, "Facture"), {
+                //timestamp: Timestamp.now(),
                 createdAt: new Date().toDateString(),
                 email: userId,
                 filename: downloadUrl,

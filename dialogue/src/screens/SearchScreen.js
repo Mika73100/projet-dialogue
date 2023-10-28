@@ -18,7 +18,6 @@ const SearchScreen = () => {
   const [found, setFound] = useState(false)
   const [searchFriendName, setSearchFriendName] = useState([])
 
-
   //je travail avec firebase et donc il est possible que certain element mettes du temps a me parvenir 
   //alors je travail avec une fonction async
   const HandleSearch = async () => {
@@ -104,19 +103,17 @@ const SearchScreen = () => {
             <FlatList
               data={searchFriendName}
               key={(item) => item.username}
-              // Utilisation de VirtualizedList pour améliorer les performances
-              // en limitant le rendu d'éléments à l'écran
               initialNumToRender={10}
               maxToRenderPerBatch={10}
               windowSize={10}
               renderItem={({ item }) => (
-                //ici dans le touchableOpacity j'envoie la navigation dans une autre page qui s'appel message.
-                //apres la virgule j'expédit en mêmte temps du changement de page mes donnée dans la page cliqué.
+                //ici dans le touchableOpacity j'envoie la navigation dans une autre page qui s'appel messageScreen.
+                //apres la virgule j'expédit en même temps du changement de page mes donnée dans la page cliqué.
                 <TouchableOpacity onPress={() => navigation.navigate('MessageScreen', {
                   friendName: item.lastname,
                   friendAvatar: item.profilePic,
                   friendEmail: item.email,
-                  firstName: item.firstname
+                  firstFirstname: item.firstname
                 })}>
                   <View className='flex-row items-center space-x-6 bg-white border border-gray-200 p-5 rounded-lg mx-2 mb-5'>
                     {item.profilePic !== undefined ? (

@@ -20,7 +20,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import FactureScreenUser from './src/screens/FactureScreenUser';
 import DocumentCopro from './src/screens/DocumentCopro';
-import MessageScreen from './src/components/MessageScreen';
+import MessageScreen from './src/screens/MessageScreen';
 
 
 ////////////////////ADMIN///////////////////////////////
@@ -97,7 +97,7 @@ function MainStack() {
 
 
       <Stack.Screen options={{
-        headerTitle: 'Message',
+        headerTitle: '',
         headerTintColor: '#ffffff',
         headerTitleStyle: { fontWeight: 'bold' },
         headerStyle: { backgroundColor: 'blue' },

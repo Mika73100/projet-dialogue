@@ -15,12 +15,12 @@ const DocumentCopro = () => {
 
   useEffect(() => {
     if (!user) return;
-    
+
     async function fetchFactures() {
       const facturesCollection = collection(db, 'Users');
       const q = query(facturesCollection, where('email', '==', user.email));
       const querySnapshot = await getDocs(q);
-      
+
       let facture = []
       querySnapshot.forEach((doc) => {
         facture = doc.data();
@@ -28,9 +28,9 @@ const DocumentCopro = () => {
       //console.log('facture',facture.code)
       try {
         const facturesCollection = collection(db, 'Copro');
-        const q = query(facturesCollection, where('code', '==', facture.code ));
+        const q = query(facturesCollection, where('code', '==', facture.code));
         const querySnapshot = await getDocs(q);
-        
+
         querySnapshot.forEach((document) => {
           const coproData = document.data();
           const coproDocRef = doc(db, 'Copro', coproData.document_id);
@@ -43,12 +43,12 @@ const DocumentCopro = () => {
           getDoc(docRef)
             .then((doc) => {
               if (doc.exists()) {
-                
-                  setFactures({
-                    filename:doc.data().filename,
-                    copro:coproData.copro,
-                    image:coproData.image
-                  }
+
+                setFactures({
+                  filename: doc.data().filename,
+                  copro: coproData.copro,
+                  image: coproData.image
+                }
                 )
               } else {
                 console.log('Aucun document trouvé avec cet ID.');
@@ -75,22 +75,26 @@ const DocumentCopro = () => {
   //////////////////////////////ICI LA VUE//////////////////////////////////////
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <View className="flex-1 items-center justify-center mt-5 tracking-widest text-center bg-blue-500 rounded-lg mx-5">
-                    <View className="flex-1 mt-5 tracking-widest text-center rounded-lg mx-5">
-                      <Text className="flex-1 tracking-widest text-center text-white rounded-lg">{factures.copro}</Text>
-                      <Image source={{ uri: factures.image }} className='w-24 h-24 rounded-full'/>
-                    </View>
-                    <TouchableOpacity
-                        className="flex-1 mt-5 tracking-widest text-center rounded-lg mx-5"
-                        onPress={() => {
-                          Linking.openURL(factures.filename); // Ouvrir le lien URL lorsque l'utilisateur appuie dessus
-                        }}
-                      >
-                    <Text className="flex-1 mt-5 tracking-widest text-center rounded-lg mx-5"> Télécharger PDF</Text>
-                  </TouchableOpacity>
-      </View>
+<View className="flex-1 mx-5 mt-5">
+  <View className="bg-blue-500 rounded-lg overflow-hidden">
+    <Image source={{ uri: factures.image }} className="w-full h-48 object-cover" />
+    <View className="p-4">
+      <Text className="text-white text-lg font-bold mb-2">{factures.copro}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          Linking.openURL(factures.filename);
+        }}
+        className="bg-blue-700 rounded-lg py-2 text-center"
+      >
+        <Text className="text-white tracking-widest text-center">Règlement de copropriété</Text>
+      </TouchableOpacity>
     </View>
+  </View>
+</View>
+
+
+
+
   );
 };
 
