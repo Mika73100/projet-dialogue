@@ -21,7 +21,7 @@ import SearchScreen from './src/screens/SearchScreen';
 import FactureScreenUser from './src/screens/FactureScreenUser';
 import DocumentCopro from './src/screens/DocumentCopro';
 import MessageScreen from './src/screens/MessageScreen';
-
+import ListFriends from './src/screens/ListFriends';
 
 ////////////////////ADMIN///////////////////////////////
 import AdminScreen from './src/screens/admin/AdminScreen';
@@ -128,6 +128,17 @@ function MainStack() {
         }}
         name='DocumentCopro'
         component={DocumentCopro} />
+
+        <Stack.Screen options={{
+        headerTitle: "Liste d'amis",
+        headerTintColor: '#ffffff',
+        headerTitleStyle: { fontWeight: 'bold' },
+        headerStyle: { backgroundColor: 'blue' },
+        headerShown: true,
+        headerBackTitleVisible: false, // Définir un espace vide comme titre de l'écran précédent
+        }}
+        name='ListFriends'
+        component={ListFriends} />
 
 
       {/* ////////////////////////ICI PAGES ADMIN//////////////////////// */}

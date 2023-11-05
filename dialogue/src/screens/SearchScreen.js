@@ -109,7 +109,8 @@ const SearchScreen = () => {
               renderItem={({ item }) => (
                 //ici dans le touchableOpacity j'envoie la navigation dans une autre page qui s'appel messageScreen.
                 //apres la virgule j'expédit en même temps du changement de page mes donnée dans la page cliqué.
-                <TouchableOpacity onPress={() => navigation.navigate('MessageScreen', {
+                //ici j'utilise replace pour qu'a la fin de la conversation je retourne sur homeScreen.
+                <TouchableOpacity onPress={() => navigation.replace('MessageScreen', {
                   friendName: item.lastname,
                   friendAvatar: item.profilePic,
                   friendEmail: item.email,

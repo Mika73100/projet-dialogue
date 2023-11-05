@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import HorairesScreen from '../components/HorairesScreen';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+//import HorairesScreen from '../components/HorairesScreen';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 
 
 
@@ -31,37 +33,39 @@ const HelpScreen = () => {
     }
 
     return (
-        <View className="flex h-full items-center justify-center">
-            <View className="bg-white p-4 mb-50 w-full h-full max-w-screen-md">
-                <FlatList
-                    data={data}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                        <View className="flex flex-row p-2">
-                            <Text className={`font-bold text-${item.type === 'user' ? 'green' : 'red'}`}>
-                                {item.type === 'user' ? 'Vous :' : 'Bot :'}
+        <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            scrollEnabled={true}
+            behavior={'padding'}
+        >
+            <View className="min-h-full">
+                <View className="min-h-full justify-end m-5">
+                    {data.map((item, index) => (
+                        <View key={index} className="bg-white p-10">
+                            <Text style={{ fontWeight: 'bold', color: item.type === 'user' ? 'green' : 'red' }}>
+                                {item.type === 'user' ? 'Vous :' : 'ChatGPT :'}
                             </Text>
-
-                            <Text className="text-base items-center justify-center ml-2">{item.text}</Text>
+                            <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.text}</Text>
                         </View>
-                    )}
-                />
+                    ))}
+                    
+                    <TextInput
+                        style={{ borderWidth: 1, borderColor: 'black', height: 40, marginBottom: 20, borderRadius: 10, paddingLeft: 10 }}
+                        value={textInput}
+                        onChangeText={(text) => setTextInput(text)}
+                        placeholder="Posez-moi une question..."
+                    />
 
-                <TextInput
-                    className="border border-black w-full h-12 mb-4 rounded-lg p-2"
-                    value={textInput}
-                    onChangeText={(text) => setTextInput(text)}
-                    placeholder="Posez-moi une question..."
-                />
-
-                <TouchableOpacity
-                    className="bg-blue-600 h-12 rounded-lg items-center justify-center mb-20"
-                    onPress={handleSend}
-                >
-                    <Text className="text-white font-bold text-base">Let's Go</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{ backgroundColor: 'blue', height: 40, borderRadius: 10, marginBottom: 180, alignItems: 'center', justifyContent: 'center' }}
+                        onPress={handleSend}
+                    >
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Let's Go</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </KeyboardAwareScrollView>
     );
 };
 

@@ -10,9 +10,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 
-  const userAvatar = require("../../assets/profile.png")
+const userAvatar = require("../../assets/profile.png")
 
-  const ProfileScreen = () => {
+const ProfileScreen = () => {
 
   const navigation = useNavigation()
   const storage = getStorage()
@@ -32,13 +32,13 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
   //////////////////////ici la logique /////////////////////////////////////////
 
-  const queryResult = query(UserRef, where('email', '==',user.email))
+  const queryResult = query(UserRef, where('email', '==', user.email))
 
-  async function DocFinder(queryResult){
+  async function DocFinder(queryResult) {
     const querySnapshot = await getDocs(queryResult)
     querySnapshot.forEach((doc) => {
       if (userEmail === '') {
-        const {email, username, firstname, phone, lastname, adress, code, profilePic, bio} = doc.data()
+        const { email, username, firstname, phone, lastname, adress, code, profilePic, bio } = doc.data()
         setUsername(username)
         setUserEmail(email)
         setFirstname(firstname)
@@ -46,19 +46,17 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
         setLastname(lastname)
         setAdress(adress)
         setCode(code)
-
         setUserAvatarUrl(profilePic)
         setUserImageUrl(profilePic)
         setBio(bio);
-        //console.log(phone);
       }
     })
   }
 
   useEffect(() => {
     if (!user) return
-      DocFinder(queryResult)
-  },[])
+    DocFinder(queryResult)
+  }, [])
 
 
   ////////////////////////////ici image picker /////////////////////////////////
@@ -96,19 +94,19 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
         xhr.open("GET", image, true);
         xhr.send(null);
       });
-    
+
 
       const filename = image.substring(image.lastIndexOf('/'));
       const imageRef = ref(storage, `ProfilePictures/${filename}`);
 
       uploadBytes(imageRef, blob).then(async () => {
         const downloadUrl = await getDownloadURL(imageRef);
-        
+
         const querySnapshot = await getDocs(queryResult)
-        querySnapshot.forEach(async (document)=>{
-          await updateDoc(doc(db, 'Users', document.id),{
+        querySnapshot.forEach(async (document) => {
+          await updateDoc(doc(db, 'Users', document.id), {
             profilePic: downloadUrl,
-          }).then(()=> {
+          }).then(() => {
             setUserImageUrl(downloadUrl), setUserAvatarUrl(downloadUrl)
             setIsLoading(false)
           })
@@ -120,43 +118,43 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
     }
   }
 
-////////////////////////////ici la bio /////////////////////////////////////////
+  ////////////////////////////ici la bio /////////////////////////////////////////
 
-const update = async () => {
-  try {
-    setIsLoading(true);
+  const update = async () => {
+    try {
+      setIsLoading(true);
 
-    const querySnapshot = await getDocs(queryResult);
-   //console.log(querySnapshot);
-    querySnapshot.forEach(async (document) => {
-      //console.log(phone);
-      await updateDoc(doc(db, 'Users', document.id), {
-        bio: bio,
-        phone: phone, 
-        firstname: firstname,
-        lastname: lastname,
-        adress: adress,
-        code: code
-      }).then(() => {
-        setIsLoading(false);
-        // Réinitialisez la valeur du texte bio après la sauvegarde réussie
-        //setBio('');
+      const querySnapshot = await getDocs(queryResult);
+      //console.log(querySnapshot);
+      querySnapshot.forEach(async (document) => {
+        //console.log(phone);
+        await updateDoc(doc(db, 'Users', document.id), {
+          bio: bio,
+          phone: phone,
+          firstname: firstname,
+          lastname: lastname,
+          adress: adress,
+          code: code
+        }).then(() => {
+          setIsLoading(false);
+          // Réinitialisez la valeur du texte bio après la sauvegarde réussie
+          //setBio('');
+        });
       });
-    });
-  } catch (error) {
-    Alert.alert('Error', error.message);
-    setIsLoading(false);
-  }
-};
+    } catch (error) {
+      Alert.alert('Error', error.message);
+      setIsLoading(false);
+    }
+  };
 
 
-//////////////////////ici la deconnection //////////////////////////////////////
+  //////////////////////ici la deconnection //////////////////////////////////////
 
-  const Deconnexion = ()=>{
-    signOut(auth).then(()=>{
+  const Deconnexion = () => {
+    signOut(auth).then(() => {
       setUser(null)
       navigation.navigate('Login')
-    }).catch((error)=>{
+    }).catch((error) => {
       Alert.alert('Error', error.message)
     })
   };
@@ -165,124 +163,124 @@ const update = async () => {
 
   return (
     <KeyboardAwareScrollView>
-        <View className="flex justify-end px-4 pt-4">
-          <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
-                  <TouchableOpacity onPress={pickImage} className="w-24 h-24 rounded-full">
-                    {userImageUrl === null ? (
-                      <Image source={userAvatar} className='w-24 h-24 rounded-full' />
-                    ):isLoading ? (
-                      <ActivityIndicator size='large' color='white'/>
-                    ):(
-                      <Image source={{ uri: userImageUrl }} className='w-24 h-24 rounded-full'/>
-                    )}
-                    
-                  </TouchableOpacity>
-                <Text className="pt-4 mb-1 text-xl font-medium text-gray-900 dark:text-white">{firstname} {lastname}</Text>
-            <View className="flex mt-4 space-x-3 md:mt-6">
-            
-            </View>
+      <View className="flex justify-end px-4 pt-4">
+        <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
+          <TouchableOpacity onPress={pickImage} className="w-24 h-24 rounded-full">
+            {userImageUrl === null ? (
+              <Image source={userAvatar} className='w-24 h-24 rounded-full' />
+            ) : isLoading ? (
+              <ActivityIndicator size='large' color='white' />
+            ) : (
+              <Image source={{ uri: userImageUrl }} className='w-24 h-24 rounded-full' />
+            )}
+
+          </TouchableOpacity>
+          <Text className="pt-4 mb-1 text-xl font-medium text-gray-900 dark:text-white">{firstname} {lastname}</Text>
+          <View className="flex mt-4 space-x-3 md:mt-6">
+
           </View>
         </View>
-
-        <View className="flex justify-end px-4 pt-4">
-            <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ marginRight: 10 }}>Nom : </Text>
-                  <TextInput
-                    style={{
-                      padding: 4,
-                      fontSize: 14,
-                      color: 'gray', // Couleur du texte
-                    }}
-                    value={firstname}
-                    onChangeText={(text) => setFirstname(text)}
-                    placeholder={firstname ? firstname : "Entrez votre nom de famille..."}
-                  />
-                </View>
-
-
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ marginRight: 10 }}>Prenom : </Text>
-                  <TextInput
-                    style={{
-                      padding: 4,
-                      fontSize: 14,
-                      color: 'gray', // Couleur du texte
-                    }}
-                    value={lastname}
-                    onChangeText={(text) => setLastname(text)}
-                    placeholder={lastname ? lastname : "Entrez votre prenom..."}
-                  />
-                </View>
-
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ marginRight: 10 }}>Adresse : </Text>
-                  <TextInput
-                    style={{
-                      padding: 4,
-                      fontSize: 14,
-                      color: 'gray', // Couleur du texte
-                      flex: 1, // Pour que le TextInput occupe tout l'espace restant
-                    }}
-                    value={adress}
-                    onChangeText={(text) => setAdress(text)}
-                    placeholder={adress ? adress : "Entrez votre adresse..."}
-                    multiline
-                    numberOfLines={4}
-                  />
-                </View>
-
-                
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ marginRight: 10 }}>Telephone : </Text>
-                  <TextInput
-                    style={{
-                      padding: 4,
-                      fontSize: 14,
-                      color: 'gray', // Couleur du texte
-                      flex: 1, // Pour que le TextInput occupe tout l'espace restant
-                    }}
-                    value={phone}
-                    onChangeText={(text) => setPhone(text)}
-                    placeholder={phone ? phone : "Entrez votre telephone..."}
-                    multiline
-                    numberOfLines={4}
-                  />
-                </View>
-
-
-
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Email: {userEmail}</Text>
-                <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Code de copro: {code}</Text>
-            </View>
-          </View>
+      </View>
 
       <View className="flex justify-end px-4 pt-4">
         <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-              <TextInput 
-                className="h-24 p-5 text-sm text-gray-500 dark:text-gray-400"
-                value={bio}
-                onChangeText={(text) => setBio(text)}
-                placeholder={bio ? bio : "Enter your bio..."}
-                multiline
-                numberOfLines={4}
-              /> 
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ marginRight: 10 }}>Nom : </Text>
+            <TextInput
+              style={{
+                padding: 4,
+                fontSize: 14,
+                color: 'gray', // Couleur du texte
+              }}
+              value={firstname}
+              onChangeText={(text) => setFirstname(text)}
+              placeholder={firstname ? firstname : "Entrez votre nom de famille..."}
+            />
+          </View>
+
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ marginRight: 10 }}>Prenom : </Text>
+            <TextInput
+              style={{
+                padding: 4,
+                fontSize: 14,
+                color: 'gray', // Couleur du texte
+              }}
+              value={lastname}
+              onChangeText={(text) => setLastname(text)}
+              placeholder={lastname ? lastname : "Entrez votre prenom..."}
+            />
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ marginRight: 10 }}>Adresse : </Text>
+            <TextInput
+              style={{
+                padding: 4,
+                fontSize: 14,
+                color: 'gray', // Couleur du texte
+                flex: 1, // Pour que le TextInput occupe tout l'espace restant
+              }}
+              value={adress}
+              onChangeText={(text) => setAdress(text)}
+              placeholder={adress ? adress : "Entrez votre adresse..."}
+              multiline
+              numberOfLines={4}
+            />
+          </View>
+
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ marginRight: 10 }}>Telephone : </Text>
+            <TextInput
+              style={{
+                padding: 4,
+                fontSize: 14,
+                color: 'gray', // Couleur du texte
+                flex: 1, // Pour que le TextInput occupe tout l'espace restant
+              }}
+              value={phone}
+              onChangeText={(text) => setPhone(text)}
+              placeholder={phone ? phone : "Entrez votre telephone..."}
+              multiline
+              numberOfLines={4}
+            />
+          </View>
+
+
+
+          <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Email: {userEmail}</Text>
+          <Text className="pt-4 text-sm text-gray-500 dark:text-gray-400">Code de copro: {code}</Text>
+        </View>
+      </View>
+
+      <View className="flex justify-end px-4 pt-4">
+        <View className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+          <TextInput
+            className="h-24 p-5 text-sm text-gray-500 dark:text-gray-400"
+            value={bio}
+            onChangeText={(text) => setBio(text)}
+            placeholder={bio ? bio : "Enter your bio..."}
+            multiline
+            numberOfLines={4}
+          />
 
 
         </View>
       </View>
 
       <TouchableOpacity onPress={update} className="bg-blue-700 py-2 rounded-md mx-8 mt-5 mb-3">
-              <Text className="text-center font-semibold text-white text-lg">
-                Save
-              </Text>
+        <Text className="text-center font-semibold text-white text-lg">
+          Save
+        </Text>
       </TouchableOpacity>
-      
+
       <TouchableOpacity onPress={Deconnexion} className="bg-red-600 py-2 rounded-md mx-8 mt-5 mb-3">
-              <Text className="text-center font-semibold text-white text-lg">
-                Logout
-              </Text>
+        <Text className="text-center font-semibold text-white text-lg">
+          Logout
+        </Text>
       </TouchableOpacity>
     </KeyboardAwareScrollView>
   )
