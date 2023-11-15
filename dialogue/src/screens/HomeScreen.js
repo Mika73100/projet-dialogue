@@ -8,14 +8,14 @@ import { db } from '../../firebase/config';
 
 
 
-  /////////////// j'importe la photo /////////////
-  const userAvatar = require("../../assets/profile.png");
-  const message = require('../../assets/message.png')
-  const facture = require('../../assets/Facture.png')
-  const immeublecorpo = require('../../assets/immeublecorpo.png')
+/////////////// j'importe la photo /////////////
+const userAvatar = require("../../assets/profile.png");
+const message = require('../../assets/message.png')
+const facture = require('../../assets/Facture.png')
+const immeublecorpo = require('../../assets/immeublecorpo.png')
 
-  
-  const HomeScreen = () => {
+
+const HomeScreen = () => {
   const navigation = useNavigation();
   const { user, userAvatarUrl, setUserAvatarUrl } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +27,7 @@ import { db } from '../../firebase/config';
   const [code, setCode] = useState('');
 
 
-  
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -72,88 +72,94 @@ import { db } from '../../firebase/config';
 
 
 
-////////////////////////////////ici la modification///////////////////////////
+  ////////////////////////////////ici la modification///////////////////////////
 
 
 
-const fetchCopro = async () => {
-  try {
-    const coproQuery = query(collection(db, 'Copro'));
-    const querySnapshot = await getDocs(coproQuery);
+  const fetchCopro = async () => {
+    try {
+      const coproQuery = query(collection(db, 'Copro'));
+      const querySnapshot = await getDocs(coproQuery);
 
-    const coproData = [];
+      const coproData = [];
 
-    querySnapshot.forEach((document) => {
-      const copro = document.data();
+      querySnapshot.forEach((document) => {
+        const copro = document.data();
 
-      coproData.push({
-        id: document.id,
-        copro: copro, // Remplacez par le champ approprié
-        code: code, // Utilisez le code de l'utilisateur ici
-        // Autres champs de copropriété ici
+        coproData.push({
+          id: document.id,
+          copro: copro, // Remplacez par le champ approprié
+          code: code, // Utilisez le code de l'utilisateur ici
+          // Autres champs de copropriété ici
+        });
       });
-    });
 
-    setCopro(coproData);
-  } catch (error) {
-    Alert.alert('Erreur', error.message);
-  }
-};
+      setCopro(coproData);
+    } catch (error) {
+      Alert.alert('Erreur', error.message);
+    }
+  };
 
-const CoproRef = collection(db, "Copro");
-const queResult = query(CoproRef, where('code', '==', user.email));
-useEffect(() => {
-  fetchCopro(queResult); // Appel pour récupérer les copropriétés
-}, []);
-
-
-
-///////////////////////////////////////////////////////////////////////////////
+  const CoproRef = collection(db, "Copro");
+  const queResult = query(CoproRef, where('code', '==', user.email));
+  useEffect(() => {
+    fetchCopro(queResult); // Appel pour récupérer les copropriétés
+  }, []);
 
 
 
-  return(
+  ///////////////////////////////////////////////////////////////////////////////
+
+
+
+  return (
     <View style={{ flex: 1 }}>
 
-        <TouchableOpacity onPress={() => navigation.navigate('ListFriends',{}) } 
-                          className="bg-orange-200 h-40 rounded-md mx-8 mt-10">
-          <ImageBackground source={ message } style="w-full h-full bg-red-400 text-gray-500">
-            <Text className="text-center font-semibold text-white text-lg h-full">
-                  
-            </Text>
-          </ImageBackground>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('ListFriends', {})}
+        className="bg-orange-200 h-40 rounded-md mx-8 mt-10">
+        <ImageBackground source={message} style="w-full h-full bg-red-400 text-gray-500">
+          <Text className="text-center font-semibold text-white text-lg h-full">
+
+          </Text>
+        </ImageBackground>
+      </TouchableOpacity>
+
+      {isAdmin ? (
+        <View>
+        </View>
+      ) :
+
+        <View>
+          <TouchableOpacity onPress={() => navigation.navigate('FactureScreenUser')}
+            className="bg-amber-400 h-40 rounded-md mx-8 mt-10">
+            <ImageBackground source={facture} style="w-full h-full bg-red-400 text-gray-500">
+              <Text className="text-center font-semibold text-white text-lg h-full">
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate('DocumentCopro')}
+            className="bg-indigo-600 h-40 rounded-md mx-8 mt-10">
+            <ImageBackground source={immeublecorpo} style="w-full h-full bg-red-400 text-gray-500">
+              <Text className="text-center font-semibold text-white text-lg h-full">
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
+        </View>}
 
 
-        <TouchableOpacity onPress={() => navigation.navigate('FactureScreenUser') } 
-                          className="bg-amber-400 h-40 rounded-md mx-8 mt-10">
-          <ImageBackground source={ facture } style="w-full h-full bg-red-400 text-gray-500">
-            <Text className="text-center font-semibold text-white text-lg h-full">
-            </Text>
-          </ImageBackground>
-        </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('DocumentCopro') } 
-                          className="bg-indigo-600 h-40 rounded-md mx-8 mt-10">
-          <ImageBackground source={ immeublecorpo } style="w-full h-full bg-red-400 text-gray-500">
-            <Text className="text-center font-semibold text-white text-lg h-full">
-            </Text>
-          </ImageBackground>
-        </TouchableOpacity>
 
-        
-      
-
-{
-  /////////////////////////////////////////////////////////////////////////////
-}
+      {
+        /////////////////////////////////////////////////////////////////////////////
+      }
 
 
 
 
       <View className='flex flex-row-reverse absolute bottom-[10%] right-[7%]'>
         <View>
-          <TouchableOpacity onPress={()=> navigation.navigate('HelpScreen')} className='bg-orange-500 h-16 w-16 rounded-full items-center justify-center'>
+          <TouchableOpacity onPress={() => navigation.navigate('HelpScreen')} className='bg-orange-500 h-16 w-16 rounded-full items-center justify-center'>
             <Ionicons name="help" size={25} color="white" /><Text className='text-white'>Help</Text>
           </TouchableOpacity>
         </View>
@@ -161,16 +167,16 @@ useEffect(() => {
 
       {isAdmin ? (
         <View className='flex flex-row-reverse absolute bottom-[10%] left-[7%]'>
-        <TouchableOpacity onPress={() => navigation.navigate('AdminScreen')} style={{ backgroundColor: 'blue', height: 60, width: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' }}>
-              <Ionicons name="md-home-outline" size={25} color="white" />
+          <TouchableOpacity onPress={() => navigation.navigate('AdminScreen')} style={{ backgroundColor: 'blue', height: 60, width: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' }}>
+            <Ionicons name="md-home-outline" size={25} color="white" />
             <Text style={{ color: 'white' }}>Admin</Text>
           </TouchableOpacity>
         </View>
-      ) :         
-      
-      <View className='flex flex-row-reverse absolute bottom-[10%] left-[7%]'>
-        <TouchableOpacity onPress={() => navigation.navigate('FactureScreenUser')} style={{ backgroundColor: 'blue', height: 60, width: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' }}>
-              <Ionicons name="document-text-outline" size={25} color="white" />
+      ) :
+
+        <View className='flex flex-row-reverse absolute bottom-[10%] left-[7%]'>
+          <TouchableOpacity onPress={() => navigation.navigate('FactureScreenUser')} style={{ backgroundColor: 'blue', height: 60, width: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' }}>
+            <Ionicons name="document-text-outline" size={25} color="white" />
             <Text style={{ color: 'white' }}>Facture</Text>
           </TouchableOpacity>
         </View>}
