@@ -125,8 +125,10 @@ const HomeScreen = () => {
       </TouchableOpacity>
 
       {isAdmin ? (
+
         <View>
         </View>
+        
       ) :
 
         <View>

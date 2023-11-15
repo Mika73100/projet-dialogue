@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { ImageBackground, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
+import { ImageBackground, Text, TextInput, TouchableOpacity, View, Alert} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../firebase/config';
 import { addDoc, collection } from 'firebase/firestore';
+
+import Checkbox from 'expo-checkbox';
+
 
 
 const backImage = require("../../assets/immeuble-paris-nuit.jpg");
@@ -16,10 +19,11 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [code, setCode] = useState('');
+    const [isChecked, setChecked] = useState('');
 
     
     const HandleRegister = () => {
-        if(email === '' || password === '' || confirmPassword ==='' || code === ''){
+        if(email === '' || password === '' || confirmPassword ==='' || code === '' || isChecked === ''){
             Alert.alert("error", "Remplissez tous les champs")
         }
         else if (password !== confirmPassword) {
@@ -81,6 +85,21 @@ const backImage = require("../../assets/immeuble-paris-nuit.jpg");
                             value={code}
                             onChangeText={setCode}
                         />
+
+                        <Text className='mb-2 marker:font-semibold tracking-wider text-white text-center'> 
+                            RGPD
+                        </Text>
+
+                        <View>
+                            <Checkbox
+                            className='text-center bg-gray-100 opacity-90 mb-2'
+                            value={isChecked}
+                            onValueChange={setChecked}
+                            color={isChecked ? '#4630EB' : undefined}
+                            />
+                        </View>
+
+
 
                         <View>
                             <TouchableOpacity onPress={HandleRegister} className='mt-10 text-center bg-yellow-400 opacity-90 rounded-lg py-3 px-10'>
