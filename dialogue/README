@@ -1,3 +1,4 @@
+
 npx create-expo-app my-app
 
 lancer avec npx expo start
@@ -46,7 +47,6 @@ Pour le drawer : npm i react-native-paper
 
 
 
-email: michael-73@live.fr 
-mdp: mbarreca
+
 
 
