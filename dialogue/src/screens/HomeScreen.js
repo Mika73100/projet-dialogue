@@ -11,7 +11,7 @@ import { db } from '../../firebase/config';
 /////////////// j'importe la photo /////////////
 const userAvatar = require("../../assets/profile.png");
 const message = require('../../assets/message.png')
-const facture = require('../../assets/Facture.png')
+const facture = require('../../assets/facture.png')
 const immeublecorpo = require('../../assets/immeublecorpo.png')
 
 
