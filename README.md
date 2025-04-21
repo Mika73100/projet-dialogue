@@ -65,4 +65,13 @@ tailwind.config.js → Fichier de style
 package.json → Dépendances et scripts Expo
 
 ## 🙌 Remerciements
-Ce projet a été conçu pour améliorer la communication au sein d’une copropriété grâce à une app simple, fluide et moderne.
+
+Merci d’avoir jeté un œil à ce projet !  
+Il a été pensé pour apprendre, tester, expérimenter — que tu sois développeur junior, formateur ou simplement curieux du **fullstack JS**.
+
+<div align="center">
+⭐ N’hésite pas à forker, améliorer ou t’en inspirer ! ⭐  
+Bon code à toi 🚀
+
+⭐ Un petit like sur le repo fait toujours plaisir ! ⭐  
+</div>
