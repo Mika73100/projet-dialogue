@@ -55,9 +55,6 @@ npm install
 npm start
 ```
 
-🖼️ Aperçus de l'application
-<img src="./dialogue/assets/message.png" width="300"/> <img src="./dialogue/assets/facture.png" width="300"/> <img src="./dialogue/assets/profile.png" width="300"/> <img src="./dialogue/assets/immeuble-paris.jpg" width="300"/> <img src="./dialogue/assets/coproimage/rive-geneve.jpg" width="300"/>
-
 ## 📁 Structure du projet
 /assets/ → Images, fonds, splash, gifs
 
